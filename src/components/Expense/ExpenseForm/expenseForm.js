@@ -59,7 +59,36 @@ class ExpenseForm extends React.Component {
         {
             name: "Internet",
             value: "internet"
-        }
+        },
+        {
+            name: "Restaurant",
+            value: "restaurant"
+        },
+        {
+            name: "Snack",
+            value: "snack"
+        },
+        {
+            name: "Drinks",
+            value: "drinks"
+        },
+        {
+            name: "Cab/auto",
+            value: "cab-auto"
+        },
+        {
+            name: "Flight",
+            value: "flight"
+        },
+        {
+            name: "Personal",
+            value: "personal"
+        },
+        {
+            name: "Art",
+            value: "art"
+        },
+        
     ];
 
     sourceMap = [
@@ -101,7 +130,7 @@ class ExpenseForm extends React.Component {
 
     render() {
         return (
-            <Form onSubmit={(i) => this.createExpense(i)}>
+            <Form onSubmit={(i) => this.createExpense(i)} className="expenseForm">
                 <Form.Group className="mb-3" controlId="expenseForm.amount">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />

@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 function callCreateExpenseApi(body, event){
-    axios.post("http://localhost:8080/expense",
+    axios.post("http://192.168.1.5:8080/expense",
         
             body
         )
