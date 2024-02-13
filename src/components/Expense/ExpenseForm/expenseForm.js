@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import axios from "axios"
-import { createExpense } from '../../API/createExpenseApi';
+import { callCreateExpenseApi } from '../../API/createExpenseApi';
 
 class ExpenseForm extends React.Component {
     constructor(props) {
@@ -18,21 +17,10 @@ class ExpenseForm extends React.Component {
         };
     }
 
-    componentDidMount() {
-        // axios.get(
-        //         `http://localhost:8080/user/all`
-        //     )
-        //     .then((response) => {
-        //         let posts = response.data.data.data;
-        //         console.log("tess", posts[0]);
-        //         this.setState({ posts });
-        //     });
-    }
-
     createExpense = event => {
         
         event.preventDefault();
-        createExpense(this.state, event);
+        callCreateExpenseApi(this.state, event);
         
     }
 
@@ -109,13 +97,7 @@ class ExpenseForm extends React.Component {
         });
     };
 
-    handleClick(event) {
-        event.preventDefault()
-        console.log("state", this.state);
-    }
-
     currentDateLimt = new Date().toISOString().split('T')[0];
-    
 
     render() {
         return (

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-function createExpense(body, event){
+function callCreateExpenseApi(body, event){
     axios.post("http://localhost:8080/expense",
         
             body
@@ -16,4 +16,4 @@ function createExpense(body, event){
         });
 }
 
-export {createExpense};
+export {callCreateExpenseApi};

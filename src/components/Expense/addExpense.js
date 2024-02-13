@@ -1,16 +1,16 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
 import ExpenseForm from './ExpenseForm/expenseForm';
+import ExpenseHistory from '../History/expenseHistory';
 
 class AddExpense extends React.Component {
     render() {
         return (
-            <Container fluid className='vert-al'>
-                <div className="App-header bg-dark border-top border-white" >
+
+                <div>
                     <h3>Add Expense</h3>
                     <ExpenseForm></ExpenseForm>
+                    <ExpenseHistory></ExpenseHistory>
                 </div>
-            </Container>
             
         )
     }
