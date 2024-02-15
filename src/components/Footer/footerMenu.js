@@ -1,33 +1,22 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Container,Navbar, Nav } from 'react-bootstrap';
-import {PlusCircle, HouseFill, ArrowLeftRight, GearFill, BarChartFill} from 'react-bootstrap-icons';
+import { Navbar, Nav } from 'react-bootstrap';
+import { PlusCircleFill, House, ArrowLeftRight, Gear, BarChart } from 'react-bootstrap-icons';
+import "./footerMenu.css";
 
 
-class FooterMenu extends React.Component{
-    render(){
+class FooterMenu extends React.Component {
+    render() {
         return (
             <Navbar>
-                <Container fluid>
-                  <Nav className="m-auto">
-                    <Nav.Link>
-                      <Link to={`/`}><HouseFill color="white" size={30} /></Link>
-                    </Nav.Link>
-                    <Nav.Link>
-                      <Link to={`expense/history`}><ArrowLeftRight color="white" size={30} /></Link>
-                    </Nav.Link>
-                    <Nav.Link>
-                      <Link to={`expense/add`}><PlusCircle color="white" size={50} /></Link>
-                    </Nav.Link>
-                    <Nav.Link>
-                      <Link to={`expense/add`}><BarChartFill color="white" size={30} /></Link>
-                    </Nav.Link>
-                    <Nav.Link>
-                      <Link to={`/`}><GearFill color="white" size={30} /></Link>
-                    </Nav.Link>
-                  </Nav>
-                </Container>
-              </Navbar>
+                    <Nav className="m-auto footer-nav">
+                        <Link className="nav-link" to={`/`}><House color="grey" size={30} /></Link>
+                        <Link className="nav-link" to={`/history`}><ArrowLeftRight color="grey" size={30} /></Link>
+                        <Link className="nav-link" to={`/add`}><PlusCircleFill color="#2db9c9" size={50} /></Link>
+                        <Link className="nav-link" to={`/add`}><BarChart color="grey" size={30} /></Link>
+                        <Link className="nav-link" to={`/`}><Gear color="grey" size={30} /></Link>
+                    </Nav>
+            </Navbar>
         )
     }
 }

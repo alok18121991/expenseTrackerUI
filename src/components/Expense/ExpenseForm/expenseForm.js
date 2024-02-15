@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { callCreateExpenseApi } from '../../API/createExpenseApi';
+import './expenseForm.css';
 
 class ExpenseForm extends React.Component {
     constructor(props) {
@@ -131,13 +132,17 @@ class ExpenseForm extends React.Component {
     render() {
         return (
             <Form onSubmit={(i) => this.createExpense(i)} className="expenseForm">
+                <Form.Group className="mb-3" controlId="exampleForm.description">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control type="text" placeholder="Enter Description" name="description" onChange={this.handleChange} />
+                </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.amount">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.amount">
                     <Form.Label>Date</Form.Label>
-                    <Form.Control type="date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
+                    <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.source">
                     <Form.Label>Source</Form.Label>
@@ -178,10 +183,7 @@ class ExpenseForm extends React.Component {
                         }
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.description">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows={3} name="description" onChange={this.handleChange} />
-                </Form.Group>
+               
                 <Button variant="primary" type="submit">
                     Add Expense
                 </Button>

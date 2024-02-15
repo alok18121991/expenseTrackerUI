@@ -1,51 +1,48 @@
 import React from 'react';
-import axios from "axios";
-import { Col, Row} from 'react-bootstrap';
+import { HttpStatusCode } from "axios";
+import { Col, Row } from 'react-bootstrap';
 import { BagFill, CurrencyRupee } from 'react-bootstrap-icons';
 import moment from "moment";
-import "./expenseHistory.css";
+import "./history.css";
+import { callGetExpenseListApi } from '../../API/getExpenseList';
+import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
 
 class ExpenseHistory extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userId: '65bce7916e102aee72e6706a',
-            expenseList: []
+            userId: '',
+            expenseList: [],
+            limit: 5
         };
     }
 
     componentDidMount() {
-        this.getExpenseList(this.state.userId);
+            this.setState({
+                ...this.state,
+                userId: this.props.user.userId,
+                limit: this.props.limit
+            }, () => {
+                this.getExpenseList(this.state.userId, this.state.limit);
+            });
     }
 
+    deleteExpense(expenseId) {
+        callDeleteExpenseApi(expenseId)
+        this.getExpenseList(this.state.userId, this.state.limit);
 
-    getExpenseList = userId => {
-        var self = this;
-        axios.get("http://192.168.1.5:8080/expense/" + userId)
-            .then(function (response) {
-                console.log("get expenses resposne333: ", response);
-                self.setState({
-                    ...self.state,
-                    expenseList: response.data.data.data
+    }
+
+    getExpenseList(userId, limit) {
+        callGetExpenseListApi(userId, limit).then(response => {
+            if (response.status === HttpStatusCode.Ok) {
+                this.setState({
+                    ...this.state,
+                    expenseList: response.data
                 });
-                console.log("get expenses resposne22: ", self.state.expenseList);
-            })
-            .catch(function (error) {
-                console.log("get expenses failed : ", error)
-            })
-    }
-
-    deleteExpense = expenseId => {
-        var self = this;
-        axios.delete("http://192.168.1.5:8080/expense/" + expenseId)
-            .then(function (response) {
-                console.log("delete expenses resposne333: ", response);
-                self.getExpenseList(self.state.userId)
-            })
-            .catch(function (error) {
-                console.log("delete expenses failed : ", error)
-            })
+            }
+        });
     }
 
     getDateFormatted(dateString) {
@@ -53,8 +50,8 @@ class ExpenseHistory extends React.Component {
         return date.format("MMM DD, YYYY");
     }
 
-    formatExpenseTitle(title){
-        return title.length > 16 ? `${title.substring(0,16)}...` : title;
+    formatExpenseTitle(title) {
+        return title.length > 16 ? `${title.substring(0, 16)}...` : title;
     }
 
     render() {
@@ -63,11 +60,11 @@ class ExpenseHistory extends React.Component {
                 <h2>Expense History</h2>
                 {this.state.expenseList != null && this.state.expenseList.map((expense, index) => {
                     return (
-                        <div className="card expense-card" key={index}>
-                            <div className="card-body" key={expense.id}>
+                        <div className="expense-card" key={index}>
+                            <div key={expense.id}>
                                 <Row>
                                     <Col md={1} xs={2}>
-                                        <BagFill color="#41ccee" size={40} />
+                                        <BagFill color="#2db9c9" size={40} />
                                     </Col>
                                     <Col md={2} xs={6}>
                                         <Row>
@@ -78,7 +75,7 @@ class ExpenseHistory extends React.Component {
                                         <Row>
                                             <Col>
                                                 <div className='card-date'>
-                                                   {this.getDateFormatted(expense.expenseDate)}
+                                                    {this.getDateFormatted(expense.expenseDate)}
                                                 </div>
                                             </Col>
                                         </Row>
@@ -97,9 +94,10 @@ class ExpenseHistory extends React.Component {
                                     </Col>
                                 </Row>
                                 {/* <div >
-                                <button type="button" class="btn btn-danger" onClick={() => this.deleteExpense(`${expense.id}`)}>Delete</button>
+                                    <button type="button" class="btn btn-danger" onClick={() => this.deleteExpense(`${expense.id}`)}>Delete</button>
                                 </div> */}
                             </div>
+                            <hr />
                         </div>
 
                     )

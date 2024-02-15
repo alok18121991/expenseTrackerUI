@@ -1,6 +1,8 @@
 html,body {
   margin:0;
   padding:0;
+  /* background-color: #282c34; */
+  background-color: rgb(16 , 23, 35);
 }
 
 body {
@@ -10,13 +12,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
 
 .app-container {
     height: 100vh;
@@ -25,31 +27,3 @@ code {
     margin-right: 0px !important;
 }
 
-.nav-bar {
-  background-color:#41ccee;
-  position: fixed;
-  z-index: 1;
-}
-
-
- .nav-bar-link{
-  padding-top: 10vh;
- }
-
-.app-pages {
-  margin-left: 8.33%;
-}
-
-.footer-menu {
-  background-color:#41ccee;
-  border-radius: 50px 50px 0px 0px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed;
-}
-
-.nav-link {
-  padding-left: 1.5rem !important;
-  padding-right:1.5rem !important;
-}

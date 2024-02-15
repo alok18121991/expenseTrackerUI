@@ -7,8 +7,9 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
-import ExpenseHistory from './components/History/expenseHistory';
-import AddExpense from './components/Expense/addExpense';
+import AddExpense from './components/Expense/AddExpense/addExpense';
+import ExpenseHistory from './components/Expense/History/history';
+import Dashboard from './components/Dashboard/dashboard';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
@@ -17,23 +18,31 @@ import AddExpense from './components/Expense/addExpense';
 //   </React.StrictMode>
 // );
 
+const user = {
+  userId: '65bce7916e102aee72e6706a',
+  userName: "Alok Kumar Singh"
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
       {
-        path: "expense/add",
+        path: "",
+        element: <Dashboard user={user}/>,
+      },
+      {
+        path: "add",
         element: <AddExpense />,
       },
       {
-        path: "expense/history",
-        element: <ExpenseHistory />,
+        path: "history",
+        element: <ExpenseHistory user={user} limit={0}/>,
       },
-    ],
-    
+      
+    ]
   }
-
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
