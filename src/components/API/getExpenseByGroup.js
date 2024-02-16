@@ -1,12 +1,13 @@
 import axios from "axios";
 
 
-async function callGetExpenseByGroupApi(userIds, numMonths) {
+async function callGetExpenseByGroupTypeApi(userIds, numMonths, groupType) {
     try {
         const response = await axios.get(`http://192.168.1.7:8080/expense/daily`, {
             params: {
                 userids: userIds,
-                numMonths: numMonths
+                numMonths: numMonths,
+                groupType: groupType
             }
         }
         );
@@ -26,4 +27,4 @@ async function callGetExpenseByGroupApi(userIds, numMonths) {
     }
 }
 
-export { callGetExpenseByGroupApi };
+export { callGetExpenseByGroupTypeApi as callGetExpenseByGroupApi };

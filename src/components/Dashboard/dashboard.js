@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
                 user: this.props.user,
             }, () => {
                 this.getExpenseList(this.state.user.userId, 0);
-                this.getExpenseGroupByDate(this.state.user.userId, 2);
+                this.getExpenseGroupByDate(this.state.user.userId, 1, "date");
             });
     }
 
@@ -66,8 +66,8 @@ class Dashboard extends React.Component {
         });
     }
 
-    getExpenseGroupByDate(userId, monthCount){
-        callGetExpenseByGroupApi(userId, monthCount).then(response => {
+    getExpenseGroupByDate(userId, monthCount, dateType){
+        callGetExpenseByGroupApi(userId, monthCount, dateType).then(response => {
             if (response.status === HttpStatusCode.Ok) {
             this.setState({
                 ...this.state,
