@@ -8,6 +8,7 @@ import ExpenseHistory from '../Expense/History/history';
 import ReactApexChart from 'react-apexcharts';
 import { callGetExpenseListApi } from '../API/getExpenseList';
 import { HttpStatusCode } from 'axios';
+import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
 
 class Dashboard extends React.Component {
 
@@ -50,6 +51,7 @@ class Dashboard extends React.Component {
                 user: this.props.user,
             }, () => {
                 this.getExpenseList(this.state.user.userId, 0);
+                this.getExpenseGroupByDate(this.state.user.userId, 2);
             });
     }
 
@@ -64,16 +66,25 @@ class Dashboard extends React.Component {
         });
     }
 
+    getExpenseGroupByDate(userId, monthCount){
+        callGetExpenseByGroupApi(userId, monthCount).then(response => {
+            if (response.status === HttpStatusCode.Ok) {
+            this.setState({
+                ...this.state,
+                expenseListByDate: response.data,
+            });
+         }
+        })
+    }
+
     render() {
-        // let user = {
-        //     userId: '65bce7916e102aee72e6706a',
-        //     userName: "Alok Kumar Singh"
-        //   };
         return (
             <div>
+                { this.state.expenseListByDate !== null && this.state.expenseListByDate !== undefined ?
                 <Row>
-                    <AreaGraph />
+                    <AreaGraph expenseListByDate={this.state.expenseListByDate}/> 
                 </Row>
+                : " "}
                 <div>
                     <Row>
                         <Col className='total-expense'>

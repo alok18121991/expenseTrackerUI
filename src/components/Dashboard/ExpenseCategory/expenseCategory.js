@@ -75,7 +75,7 @@ class ExpenseCategory extends React.Component {
                 <div className="expense-category-amount">
                     <CurrencyRupee />{this.state.amount}
                 </div>
-                <div className="amount-consumed">consumed</div>
+                <div className="amount-consumed">debited</div>
                 <div className="expense-category-amount">
                     <CurrencyRupee />{this.state.limit - this.state.amount}
                 </div>
