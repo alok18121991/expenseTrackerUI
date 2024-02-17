@@ -8,7 +8,7 @@ class ExpenseForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: '65bce7916e102aee72e6706a',
+            userId: '',
             amount: '',
             expenseDate: '',
             type: '',
@@ -25,81 +25,263 @@ class ExpenseForm extends React.Component {
         
     }
 
-    categoryMap = [
+    users = [
         {
-            name: "Home",
-            value: "home"
+            userId: '65bce7916e102aee72e6706a',
+            userName: 'Alok Kumar Singh'
         },
         {
-            name: "Shopping",
-            value: "shopping"
-        },
-        {
-            name: "Food",
-            value: "food"
-        },
-        {
-            name: "Travel",
-            value: "travel"
+            userId: '65bd004222aa8c35198c22be',
+            userName: 'Rashi Vishwakarma'
         }
     ];
 
-    subCategoryMap = [
+    categoryMap = [
         {
-            name: "Rent",
-            value: "rent"
+            name: "Home",
+            value: "Home"
         },
         {
-            name: "House Help",
-            value: "househelp"
+            name: "Life",
+            value: "Life"
         },
         {
-            name: "Grocery",
-            value: "grocery"
+            name: "Entertainment",
+            value: "Entertainment"
         },
         {
-            name: "Internet",
-            value: "internet"
+            name: "Food and Drink",
+            value: "Food and Drink"
         },
         {
-            name: "Restaurant",
-            value: "restaurant"
+            name: "Travel",
+            value: "Travel"
         },
         {
-            name: "Snack",
-            value: "snack"
-        },
-        {
-            name: "Drinks",
-            value: "drinks"
-        },
-        {
-            name: "Cab/auto",
-            value: "cab-auto"
-        },
-        {
-            name: "Flight",
-            value: "flight"
-        },
-        {
-            name: "Personal",
-            value: "personal"
-        },
-        {
-            name: "Art",
-            value: "art"
-        },
-        
+            name: "Shopping",
+            value: "Shopping"
+        }
     ];
+
+    subCategoryMap = {
+        "Home" : [
+            {
+                name:"Furniture",
+                value:"Furniture"
+            },
+            {
+                name:"Electricals",
+                value:"Electricals"
+            },
+            {
+                name:"Household Supplies",
+                value:"Household Supplies"
+            },
+            {
+                name:"Maintenance",
+                value:"Maintenance"
+            },
+            {
+                name:"Mortage",
+                value:"Mortage"
+            },
+            {
+                name:"Pets",
+                value:"Pets"
+            },
+            {
+                name:"Rent",
+                value:"Rent"
+            },
+            {
+                name:"House Help",
+                value:"House Help"
+            },
+            {
+                name:"Services",
+                value:"Services"
+            },
+            {
+                name:"Groceries",
+                value:"Groceries"
+            },
+            {
+                name:"Cleaning",
+                value:"Cleaning"
+            },
+            {
+                name:"Electricity",
+                value:"Electricity"
+            },
+            {
+                name:"Gas",
+                value:"Gas"
+            },
+            {
+                name:"Trash",
+                value:"Trash"
+            },
+            {
+                name:"Phone/Internet",
+                value:"Phone/Internet"
+            },
+            {
+                name:"Water",
+                value:"Water"
+            },
+            {
+                name:"Other",
+                value:"Other"
+            },
+        ],
+        "Life" : [
+            {
+                name:"Childcare",
+                value:"Childcare"
+            },
+            {
+                name:"Education",
+                value:"Education"
+            },
+            {
+                name:"Insurance",
+                value:"Insurance"
+            },
+            {
+                name:"Medical Expenses",
+                value:"Medical Expenses"
+            },
+            {
+                name:"Taxes",
+                value:"Taxes"
+            },
+            {
+                name:"Gym",
+                value:"Gym"
+            },
+            {
+                name:"Other",
+                value:"Other"
+            },
+            {
+                name:"OTT",
+                value:"OTT"
+            },
+        ],
+        "Entertainment" :[
+            {
+                name:"Games",
+                value:"Games"
+            },
+            {
+                name:"Movies",
+                value:"Movies"
+            },
+            {
+                name:"Music",
+                value:"Music"
+            },
+            {
+                name:"Sports",
+                value:"Sports"
+            },
+            {
+                name:"Other",
+                value:"Other"
+            }
+        ],
+        "Food and Drink":[
+            {
+                name:"Dining out",
+                value:"Dining out"
+            },
+            {
+                name:"Liquor",
+                value:"Liquor"
+            },
+            {
+                name:"Snacks",
+                value:"Snacks"
+            },
+            {
+                name:"Sweets",
+                value:"Sweets"
+            },
+            {
+                name:"Other",
+                value:"Other"
+            },
+        ],
+        "Travel":[
+            {
+                name:"Bus/Train",
+                value:"Bus/Train"
+            },
+            {
+                name:"Car",
+                value:"Car"
+            },
+            {
+                name:"Gas/Fuel",
+                value:"Gas/Fuel"
+            },
+            {
+                name:"Hotel",
+                value:"Hotel"
+            },
+            {
+                name:"Parking",
+                value:"Parking"
+            },
+            {
+                name:"Flight",
+                value:"Flight"
+            },
+            {
+                name:"Taxi/Cab",
+                value:"Taxi/Cab"
+            },
+            {
+                name:"Other",
+                value:"other"
+            },
+        ],
+        "Shopping":[
+            {
+                name:"Clothes",
+                value:"Clothes"
+            },
+            {
+                name:"Footwear",
+                value:"Footwear"
+            },
+            {
+                name:"Personal",
+                value:"Personal"
+            },
+            {
+                name:"Gifts",
+                value:"Gifts"
+            },
+            {
+                name:"Art/Hobby",
+                value:"Art/Hobby"
+            },
+            {
+                name:"Gadgets",
+                value:"Gadgets"
+            }
+        ]
+    }
 
     sourceMap = [
         {
             name: "Credit Card",
-            value: "creditCard"
+            value: "Credit Card"
         },
         {
             name: "Cash",
-            value: "cash"
+            value: "Cash"
         }
     ];
 
@@ -140,7 +322,20 @@ class ExpenseForm extends React.Component {
                     <Form.Label>Amount</Form.Label>
                     <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="expenseForm.amount">
+                <Form.Group className="mb-3" controlId="expenseForm.category">
+                    <Form.Label>Paid by</Form.Label>
+                    <Form.Select aria-label="Category" name="userId" onChange={this.handleChange} required>
+                        <option value="">Select User</option>
+                        {this.users.map((user) => {
+                            return (
+                                <option key={user.userId} value={user.userId}>{user.userName}</option>
+                            )
+                        })
+
+                        }
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="expenseForm.date">
                     <Form.Label>Date</Form.Label>
                     <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
                 </Form.Group>
@@ -159,11 +354,11 @@ class ExpenseForm extends React.Component {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.category">
                     <Form.Label>Category</Form.Label>
-                    <Form.Select aria-label="Default select example" name="type" onChange={this.handleChange} required>
-                        <option>Select Category</option>
+                    <Form.Select aria-label="Category" name="type" onChange={this.handleChange} required>
+                        <option value="">Select Category</option>
                         {this.categoryMap.map((category) => {
                             return (
-                                <option key={category.value} value={category.value}>{category.name}</option>
+                                <option key={category.value} value={category.value} >{category.name}</option>
                             )
                         })
 
@@ -172,9 +367,9 @@ class ExpenseForm extends React.Component {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.subCategory">
                     <Form.Label>Sub Category</Form.Label>
-                    <Form.Select aria-label="Default select example" name="subType" onChange={this.handleChange} required>
-                        <option>Select Sub Category</option>
-                        {this.subCategoryMap.map((category) => {
+                    <Form.Select aria-label="Sub Category" name="subType" onChange={this.handleChange} required>
+                        <option value="">Select Sub Category</option>
+                        {this.state.type !== '' && this.subCategoryMap[this.state.type].map((category) => {
                             return (
                                 <option key={category.value} value={category.value}>{category.name}</option>
                             )

@@ -92,7 +92,7 @@ class ExpenseCategory extends React.Component {
             <div className="card-title-main">
                 {this.state.title}
             </div>
-            <div className="card-body">
+            <div className="card-body card-body-main">
                 <div className="expense-category-amount">
                     <CurrencyRupee />{this.state.amount}
                 </div>

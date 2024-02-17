@@ -15,7 +15,7 @@ class AreaGraph extends React.Component {
                 },
                 chart: {
                     id: "area-graph",
-                    foreColor: "#ccc",
+                    foreColor: "#ccc"
                 },
                 xaxis: {
                     categories: [1, 2, 3, 4, 5, 6, 7, 8 ,9, 10,1, 2, 3, 4, 5, 6, 7, 8 ,9, 10,1, 2, 3, 4, 5, 6, 7, 8 ,9, 10]
