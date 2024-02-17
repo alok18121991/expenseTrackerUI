@@ -66,7 +66,7 @@ class ExpenseHistory extends React.Component {
                                     <Col md={1} xs={2}>
                                         <BagFill color="#2db9c9" size={40} />
                                     </Col>
-                                    <Col md={2} xs={6}>
+                                    <Col md={2} xs={4}>
                                         <Row>
                                             <Col>
                                                 <div className='card-desc'>{this.formatExpenseTitle(expense.description)}</div>
@@ -80,7 +80,7 @@ class ExpenseHistory extends React.Component {
                                             </Col>
                                         </Row>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Row>
                                             <Col>
                                                 <div className='card-amount'><span><CurrencyRupee /></span>{expense.amount}</div>
