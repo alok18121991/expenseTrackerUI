@@ -2,8 +2,9 @@ import axios from "axios";
 
 
 async function callGetExpenseListApi(userId, limit){
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-        const response = await axios.get(`http://192.168.1.7:8080/expense/${userId}/${limit}`);
+        const response = await axios.get(`${apiBaseUrl}/${userId}/${limit}`);
         console.log("callGetExpenseListApi response", response.data.data.data);
         return {
             error: null,

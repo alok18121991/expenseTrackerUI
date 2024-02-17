@@ -2,10 +2,8 @@ import axios from "axios";
 
 
 function callCreateExpenseApi(body, event){
-    axios.post("http://192.168.1.7:8080/expense",
-        
-            body
-        )
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+    axios.post(apiBaseUrl, body)
         .then(function (response){
             event.target.reset();
             console.log("response post", response);

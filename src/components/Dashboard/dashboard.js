@@ -18,11 +18,11 @@ class Dashboard extends React.Component {
         this.state = {
 
             series: [44, 55, 41, 17, 15],
-            
+
             options: {
                 chart: {
                     type: 'donut',
-                    
+
                 },
                 labels: ['Home', 'Shopping', 'Food', 'Travel', "Saving"],
                 responsive: [{
@@ -43,16 +43,20 @@ class Dashboard extends React.Component {
         };
 
     };
-    
+
 
     componentDidMount() {
-            this.setState({
-                ...this.state,
-                user: this.props.user,
-            }, () => {
-                this.getExpenseList(this.state.user.userId, 0);
-                this.getExpenseGroupByDate(this.state.user.userId, 1, "date");
-            });
+        this.setState({
+            ...this.state,
+            user: this.props.user,
+        }, () => {
+
+            this.getExpenseList(this.state.user.userId, 0);
+            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "date");
+            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "mode");
+            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "type");
+
+        });
     }
 
     getExpenseList(userId, limit) {
@@ -66,30 +70,35 @@ class Dashboard extends React.Component {
         });
     }
 
-    getExpenseGroupByDate(userId, monthCount, dateType){
-        callGetExpenseByGroupApi(userId, monthCount, dateType).then(response => {
+    getExpenseGroupByGroupType(userId, monthCount, groupType) {
+        callGetExpenseByGroupApi(userId, monthCount, groupType).then(response => {
             if (response.status === HttpStatusCode.Ok) {
-            this.setState({
-                ...this.state,
-                expenseListByDate: response.data,
-            });
-         }
+                this.setState(prevState => ({
+                    ...prevState,
+                    expenseListGroupBy: {
+                        ...prevState.expenseListGroupBy,
+                        [groupType]: response.data,
+                    }
+                }));
+            }
         })
     }
 
     render() {
         return (
             <div>
-                { this.state.expenseListByDate !== null && this.state.expenseListByDate !== undefined ?
-                <Row>
-                    <AreaGraph expenseListByDate={this.state.expenseListByDate}/> 
-                </Row>
-                : " "}
+                {this.state.expenseListGroupBy !== null && this.state.expenseListGroupBy !== undefined
+                    &&
+                    this.state.expenseListGroupBy.date !== null && this.state.expenseListGroupBy.date !== undefined ?
+                    <Row>
+                        <AreaGraph expenseListByDate={this.state.expenseListGroupBy.date} />
+                    </Row>
+                    : " "}
                 <div>
                     <Row>
                         <Col className='total-expense'>
                             <ExpenseCategory title={"Total Expense"} limit={"0"} amount={"50000"} bgColor="transparent" />
-                         </Col>
+                        </Col>
                     </Row>
                     <Row>
                         <Col>
@@ -122,7 +131,7 @@ class Dashboard extends React.Component {
                         </Col>
                     </Row>
                 </div>
-                {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} limit={5}/> : ""}
+                {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} limit={5} /> : ""}
             </div>
 
         )

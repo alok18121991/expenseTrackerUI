@@ -1,7 +1,8 @@
 import axios from "axios";
 
 function callDeleteExpenseApi(expenseId){
-    axios.delete(`http://192.168.1.7:8080/expense/${expenseId}`)
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+    axios.delete(`${apiBaseUrl}/${expenseId}`)
         .then(function (response) {
             console.log("delete expenses resposne333: ", response);
             return {
