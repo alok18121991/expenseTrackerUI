@@ -23,6 +23,17 @@ const user = {
   userName: "Alok Kumar Singh"
 };
 
+const users = [
+  {
+      userId: '65bce7916e102aee72e6706a',
+      userName: 'Alok Kumar Singh'
+  },
+  {
+      userId: '65bd004222aa8c35198c22be',
+      userName: 'Rashi Vishwakarma'
+  }
+];
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,7 +41,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Dashboard user={user}/>,
+        element: <Dashboard user={user} users={users}/>,
       },
       {
         path: "add",
@@ -38,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: "history",
-        element: <ExpenseHistory user={user} limit={0}/>,
+        element: <ExpenseHistory user={user} users={users} limit={0}/>,
       },
       
     ]

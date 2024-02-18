@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./dashboard.css";
 import AreaGraph from './AreaGraph/areaGraph';
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import ExpenseCategory from './ExpenseCategory/expenseCategory';
 import ExpenseHistory from '../Expense/History/history';
 import ReactApexChart from 'react-apexcharts';
@@ -16,7 +16,8 @@ class Dashboard extends React.Component {
         super(props);
 
         this.state = {
-
+            users: [],
+            selectedUsers:[],
             series: [],
 
             options: {
@@ -49,12 +50,28 @@ class Dashboard extends React.Component {
         this.setState({
             ...this.state,
             user: this.props.user,
+            users: this.props.users
         }, () => {
 
             this.getExpenseList(this.state.user.userId, 0);
             this.getExpenseGroupByGroupType(this.state.user.userId, 1, "date");
             this.getExpenseGroupByGroupType(this.state.user.userId, 1, "mode");
             this.getExpenseGroupByGroupType(this.state.user.userId, 1, "type");
+            let users = this.state.users;
+
+            users.forEach(userObj => {
+                if (userObj.userId === this.state.user.userId) {
+                    userObj.selected = true;
+                } else {
+                    userObj.selected = false;
+                }
+            });
+
+            this.setState(prevState => ({
+            selectedUsers: [
+                ...users
+            ]
+          }));
 
         });
     }
@@ -115,9 +132,53 @@ class Dashboard extends React.Component {
         })
     }
 
+    handleUserSelect= event=>{
+        console.log("check....", event.target.id);
+
+        console.log("check22....", event.target.checked);
+        const userId = event.target.id;
+        const isChecked = event.target.checked;
+        
+        let users = this.state.selectedUsers;
+
+        users.forEach(userObj => {
+            if (userObj.userId === userId) {
+                if(isChecked){
+                    userObj.selected = true;
+                }
+                else if(!isChecked){
+                    userObj.selected = false;
+                }
+            }
+        });
+        this.setState(prevState => ({
+            selectedUsers: [
+                ...users
+            ]
+          }));
+    }
+
     render() {
         return (
             <div>
+                <Row>
+                    {
+                        <Form>
+                        {this.state.selectedUsers && this.state.selectedUsers.map((user) => (
+                          <div key={user.userId} >
+                            <Form.Check 
+                             inline
+                              type='checkbox'
+                              id={user.userId}
+                              label={user.userName}
+                              checked={user.selected}
+                              onChange={this.handleUserSelect}
+                            />
+                          </div>
+                        ))}
+                      </Form>
+                    }
+                </Row>
                 <Row>
                     {this.renderAreaGraph()}
                 </Row>
