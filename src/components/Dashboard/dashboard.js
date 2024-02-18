@@ -53,12 +53,7 @@ class Dashboard extends React.Component {
             users: this.props.users
         }, () => {
 
-            this.getExpenseList(this.state.user.userId, 0);
-            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "date");
-            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "mode");
-            this.getExpenseGroupByGroupType(this.state.user.userId, 1, "type");
             let users = this.state.users;
-
             users.forEach(userObj => {
                 if (userObj.userId === this.state.user.userId) {
                     userObj.selected = true;
@@ -66,6 +61,23 @@ class Dashboard extends React.Component {
                     userObj.selected = false;
                 }
             });
+
+            let userList = [];
+            users.forEach((obj) => {
+                if(obj.selected === true){
+                    userList.push(obj.userId);
+                }
+            })
+    
+            console.log("list111....", userList);
+                
+            this.getExpenseList(this.state.user.userId, 0);
+            this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
+            this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
+            this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
+            
+
+            
 
             this.setState(prevState => ({
             selectedUsers: [
@@ -151,6 +163,21 @@ class Dashboard extends React.Component {
                 }
             }
         });
+
+        let userList = [];
+        users.forEach((obj) => {
+            if(obj.selected === true){
+                userList.push(obj.userId);
+            }
+        })
+
+        console.log("list222....", userList.toString());
+
+        this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
+        this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
+        this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
+
+
         this.setState(prevState => ({
             selectedUsers: [
                 ...users
