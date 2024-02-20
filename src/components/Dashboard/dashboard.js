@@ -17,7 +17,7 @@ class Dashboard extends React.Component {
 
         this.state = {
             users: [],
-            selectedUsers:[],
+            selectedUsers: [],
             series: [],
 
             options: {
@@ -64,26 +64,26 @@ class Dashboard extends React.Component {
 
             let userList = [];
             users.forEach((obj) => {
-                if(obj.selected === true){
+                if (obj.selected === true) {
                     userList.push(obj.userId);
                 }
             })
-    
+
             console.log("list111....", userList);
-                
-            this.getExpenseList(this.state.user.userId, 0);
+
+            this.getExpenseList(this.state.user.userId, 5);
             this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
-            
 
-            
+
+
 
             this.setState(prevState => ({
-            selectedUsers: [
-                ...users
-            ]
-          }));
+                selectedUsers: [
+                    ...users
+                ]
+            }));
 
         });
     }
@@ -95,7 +95,7 @@ class Dashboard extends React.Component {
                     ...this.state,
                     expenseList: response.data
                 });
-            }
+            } 
         });
     }
 
@@ -140,25 +140,32 @@ class Dashboard extends React.Component {
                         }))
                     }
                 });
-            }
+            } else{
+                    this.setState({
+                        ...this.state,
+                        expenseList: [],
+                        totalExpense: 0
+                    });
+                }
+            
         })
     }
 
-    handleUserSelect= event=>{
+    handleUserSelect = event => {
         console.log("check....", event.target.id);
 
         console.log("check22....", event.target.checked);
         const userId = event.target.id;
         const isChecked = event.target.checked;
-        
+
         let users = this.state.selectedUsers;
 
         users.forEach(userObj => {
             if (userObj.userId === userId) {
-                if(isChecked){
+                if (isChecked) {
                     userObj.selected = true;
                 }
-                else if(!isChecked){
+                else if (!isChecked) {
                     userObj.selected = false;
                 }
             }
@@ -166,7 +173,7 @@ class Dashboard extends React.Component {
 
         let userList = [];
         users.forEach((obj) => {
-            if(obj.selected === true){
+            if (obj.selected === true) {
                 userList.push(obj.userId);
             }
         })
@@ -182,50 +189,64 @@ class Dashboard extends React.Component {
             selectedUsers: [
                 ...users
             ]
-          }));
+        }));
     }
 
     render() {
         return (
             <div>
-                <Row>
-                    {
-                        <Form>
-                        {this.state.selectedUsers && this.state.selectedUsers.map((user) => (
-                          <div key={user.userId} >
-                            <Form.Check 
-                             inline
-                              type='checkbox'
-                              id={user.userId}
-                              label={user.userName}
-                              checked={user.selected}
-                              onChange={this.handleUserSelect}
-                            />
-                          </div>
-                        ))}
-                      </Form>
-                    }
-                </Row>
-                <Row>
-                    {this.renderAreaGraph()}
-                </Row>
-                <Row>
-                    {this.renderTotalExpenseCard()}
 
-                </Row>
                 <Row>
-                    {this.renderModeOfExpenseCards()}
+                    {this.renderUserList()}
                 </Row>
-                <h3>Top Categories</h3>
+                {this.state.totalExpense === 0 || this.state.totalExpense === undefined || this.state.totalExpense === null ?
                 <Row>
-                    {this.renderPieChart()}
+                    <Col key={`noexpense_${this.state.totalExpense}`}>
+                        Start by adding expense or select a user
+                    </Col>
                 </Row>
-                <Row>
-                    {this.renderCategoryCards()}
-                </Row>
-                {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} limit={5} /> : ""}
+                 :
+                    <div>
+                        <Row>
+                            {this.renderAreaGraph()}
+                        </Row>
+                        <Row>
+                            {this.renderTotalExpenseCard()}
+
+                        </Row>
+                        <Row>
+                            {this.renderModeOfExpenseCards()}
+                        </Row>
+                        <h3>Top Categories</h3>
+                        <Row>
+                            {this.renderPieChart()}
+                        </Row>
+                        <Row>
+                            {this.renderCategoryCards()}
+                        </Row>
+                        <Row>
+                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} limit={5} /> : ""}
+                        </Row>
+                    </div>
+                }
             </div>
         )
+    }
+
+    renderUserList() {
+        return <Form>
+            {this.state.selectedUsers && this.state.selectedUsers.map((user) => (
+                <div key={user.userId}>
+                    <Form.Check
+                        inline
+                        type='checkbox'
+                        id={user.userId}
+                        label={user.userName}
+                        checked={user.selected}
+                        onChange={this.handleUserSelect} />
+                </div>
+            ))}
+        </Form>;
     }
 
     renderPieChart() {
