@@ -69,9 +69,9 @@ class Dashboard extends React.Component {
                 }
             })
 
-            console.log("list111....", userList);
+            // console.log("list111....", userList);
 
-            this.getExpenseList(this.state.user.userId, 5);
+            // this.getExpenseList(this.state.user.userId, 5);
             this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
@@ -152,9 +152,9 @@ class Dashboard extends React.Component {
     }
 
     handleUserSelect = event => {
-        console.log("check....", event.target.id);
+        // console.log("check....", event.target.id);
 
-        console.log("check22....", event.target.checked);
+        // console.log("check22....", event.target.checked);
         const userId = event.target.id;
         const isChecked = event.target.checked;
 
@@ -178,7 +178,7 @@ class Dashboard extends React.Component {
             }
         })
 
-        console.log("list222....", userList.toString());
+        // console.log("list222....", userList.toString());
 
         this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
         this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
