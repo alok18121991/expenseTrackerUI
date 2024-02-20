@@ -28,9 +28,7 @@ class ExpenseCategory extends React.Component {
                 amount: Math.round(amount),
                 bgColor: bgColor
             });
-            console.log("color", bgColor);
         }
-        console.log("color", bgColor);
 
     }
 
