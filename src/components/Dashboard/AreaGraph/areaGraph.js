@@ -18,22 +18,13 @@ class AreaGraph extends React.Component {
                     foreColor: "#ccc"
                 },
                 xaxis: {
-                    categories: [1, 2, 3, 4, 5, 6, 7, 8 ,9, 10,1, 2, 3, 4, 5, 6, 7, 8 ,9, 10,1, 2, 3, 4, 5, 6, 7, 8 ,9, 10]
+                    categories: []
                 },
                 dataLabels: {
                     enabled: false
                 }
             },
-            series: [
-                {
-                    name: "Series 1",
-                    data: [45, 52, 38, 45, 19, 23, 2,45, 52, 38, 45, 19, 23, 2,45, 52, 38, 45, 19, 23, 2,45, 52, 38, 45, 19, 23, 2]
-                },
-                {
-                    name: "Series 2",
-                    data: [50, 160, 30, 70, 90, 100, 90]
-                }
-            ],
+            series: [],
 
         };
     }

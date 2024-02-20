@@ -230,7 +230,7 @@ class Dashboard extends React.Component {
 
     renderPieChart() {
         return this.state.series && this.state.series.length ? <Row>
-            <div className="chart">
+            <div className="chart" key="pie-chart">
                 <ReactApexChart options={this.state.options} series={this.state.series} type="donut" />
             </div>
         </Row> : ""
@@ -243,7 +243,7 @@ class Dashboard extends React.Component {
             this.state.expenseListGroupBy.type !== null && this.state.expenseListGroupBy.type !== undefined ?
             Object.entries(this.state.expenseListGroupBy.type).map(([typeTitle, amount]) => {
                 return (
-                    <Col xs={6}>
+                    <Col xs={6} key={`total_expense_${typeTitle}_${amount}`}>
                         <ExpenseCategory title={typeTitle} limit={"40000"} amount={amount} />
                     </Col>
                 );
@@ -255,7 +255,7 @@ class Dashboard extends React.Component {
         return this.state.expenseListGroupBy !== null && this.state.expenseListGroupBy !== undefined
             &&
             this.state.expenseListGroupBy.date !== null && this.state.expenseListGroupBy.date !== undefined ?
-            <AreaGraph expenseListByDate={this.state.expenseListGroupBy.date} />
+            <AreaGraph key={`total_expense_${this.state.totalExpense}`} expenseListByDate={this.state.expenseListGroupBy.date} />
             : " ";
     }
 
@@ -265,7 +265,7 @@ class Dashboard extends React.Component {
             this.state.expenseListGroupBy.mode !== null && this.state.expenseListGroupBy.mode !== undefined ?
             Object.entries(this.state.expenseListGroupBy.mode).map(([modeTitle, amount]) => {
                 return (
-                    <Col>
+                    <Col xs={6} key={`modeOfExpenseCard_${modeTitle}_${amount}`}>
                         <ExpenseCategory title={modeTitle} limit={"20000"} amount={amount} bgColor="transparent" />
                     </Col>
                 );
@@ -275,7 +275,7 @@ class Dashboard extends React.Component {
 
     renderTotalExpenseCard() {
         return this.state.totalExpense !== undefined ?
-            <Col className='total-expense'>
+            <Col className='total-expense' key={`total_expense_${this.state.totalExpense}`}>
                 <ExpenseCategory title={"Total Expense"} limit={"0"} amount={this.state.totalExpense} bgColor="transparent" />
             </Col>
             : "";

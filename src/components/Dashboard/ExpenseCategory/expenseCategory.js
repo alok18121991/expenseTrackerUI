@@ -34,6 +34,8 @@ class ExpenseCategory extends React.Component {
 
     }
 
+    
+
     getProgressBarVarient() {
         let percentage = this.getPercentage();
         let barVarient = "info";
