@@ -1,30 +1,23 @@
 import './App.css';
-import AddExpense from './components/Expense/addExpense'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Col, Row } from 'react-bootstrap';
+import { Outlet } from "react-router-dom";
+import FooterMenu from './components/Footer/footerMenu';
 
 function App() {
   return (
     <div className="App">
-      <div className="App-header">
-        <Container className='app-container'>
-          <Row>
-            <Col xs lg="1" className='nav-bar'>
-              <nav class="nav flex-column">
-                <a class="nav-link" href="#">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Disabled</a>
-              </nav>
-            </Col>
-            <Col>
-              <AddExpense></AddExpense>
+        <Container>
+          <Row className="App-header">
+            <Col className='outlet'>
+              <Outlet/>
             </Col>
           </Row>
-
+          <Row className="footer-menu flex-row">
+              <FooterMenu />
+          </Row>
         </Container>
       </div>
-    </div>
   );
 }
 

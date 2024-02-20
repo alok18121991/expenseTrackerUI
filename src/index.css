@@ -1,6 +1,8 @@
 html,body {
   margin:0;
   padding:0;
+  /* background-color: #282c34; */
+  background-color: rgb(16 , 23, 35);
 }
 
 body {
@@ -10,6 +12,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
@@ -18,24 +21,9 @@ code {
 }
 
 .app-container {
+    height: 100vh;
+    max-width: 100% !important;
     margin-left: 0px !important;
     margin-right: 0px !important;
 }
 
-.nav-bar {
-  background-color:#41ccee;
-}
-
-
- .nav-bar-link{
-  padding-top: 10vh;
- }
-
-.history-card-content{
-  float: left;
-  width: 16.66%;
-}
-
-.history-card-content .btn{
-  float: right;
-}

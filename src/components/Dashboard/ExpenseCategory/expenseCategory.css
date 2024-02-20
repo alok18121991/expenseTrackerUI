@@ -1,0 +1,52 @@
+.expense-track-card {
+    height: 170px;
+    margin-bottom: 1rem;
+    background-color: #1d273f;
+    border-radius: 10px;
+    color:aliceblue;
+    font-weight: bold;
+    border-color: #1d273f;
+    border-width: 3px;
+}
+
+
+.expense-category-amount{
+    display: inline-block;
+}
+
+.card-title-1 {
+    color: grey;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    font-weight: bolder;
+}
+
+.card-title-main {
+    color: grey;
+    padding-top: 1rem;
+    font-weight: bolder;
+}
+
+.card-body-main {
+    background-color: #1d273f;
+}
+
+.amount-consumed {
+    margin-left:5px;
+    display: inline-block;
+    font-weight: lighter;
+    font-size: small;
+    color:rgb(232, 97, 172);
+}
+
+.amount-saved {
+    margin-left:5px;
+    display: inline-block;
+    font-weight: lighter;
+    font-size: small;
+    color:greenyellow;
+}
+
+.progress-bar-div{
+    margin-top: 1rem;
+}

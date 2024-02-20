@@ -1,12 +1,19 @@
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  /* padding-left: 1rem;
+  padding-right: 1rem; */
+  /* background-color: #282c34; */
+  background-color: #101723;
+  /* background-color: #2db9c9; */
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: left;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.outlet {
+  padding-bottom: 5rem !important;
 }
 

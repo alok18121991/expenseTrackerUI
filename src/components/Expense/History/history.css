@@ -1,0 +1,34 @@
+h2 {
+    font-weight: bolder;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+.expense-card {
+    margin-bottom: 10px;
+    height:85px;
+    border-bottom: 2px beige;
+}
+
+.card-desc{
+    font-size: medium;
+    font-weight: bold;
+}
+
+.card-date {
+    font-size: small;
+    color: grey;
+}
+
+.card-amount {
+    float:right;
+    font-weight: bold;
+    color: #d60c71f0;
+}
+
+.card-mode {
+    padding-top: 5px;
+    float:right;
+    color: grey;
+    font-size:small;
+    text-transform: uppercase;
+}
