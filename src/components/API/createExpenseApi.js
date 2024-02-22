@@ -6,11 +6,11 @@ function callCreateExpenseApi(body, event){
     axios.post(apiBaseUrl, body)
         .then(function (response){
             event.target.reset();
-            console.log("response post", response);
+            // console.log("response post", response);
             
         })
         .catch(function (error){
-            console.log("post erro ", error);
+            // console.log("post erro ", error);
         });
 }
 
