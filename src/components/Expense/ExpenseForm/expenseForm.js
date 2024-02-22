@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { callCreateExpenseApi } from '../../API/createExpenseApi';
 import './expenseForm.css';
+import { CardImage, CashCoin, CreditCard2FrontFill, HouseExclamation } from 'react-bootstrap-icons';
 
 class ExpenseForm extends React.Component {
     constructor(props) {
@@ -315,32 +316,38 @@ class ExpenseForm extends React.Component {
         return (
             <Form onSubmit={(i) => this.createExpense(i)} className="expenseForm">
                 <Form.Group className="mb-3" controlId="exampleForm.description">
-                    <Form.Label>Description</Form.Label>
+                    {/* <Form.Label>Description</Form.Label> */}
                     <Form.Control type="text" placeholder="Enter Description" name="description" onChange={this.handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.amount">
-                    <Form.Label>Amount</Form.Label>
+                    {/* <Form.Label>Amount</Form.Label> */}
                     <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="expenseForm.category">
-                    <Form.Label>Paid by</Form.Label>
-                    <Form.Select aria-label="Category" name="userId" onChange={this.handleChange} required>
-                        <option value="">Select User</option>
-                        {this.users.map((user) => {
-                            return (
-                                <option key={user.userId} value={user.userId}>{user.userName}</option>
-                            )
-                        })
+                <Row className="">
+                    <Col xs md>
+                    <Form.Group className="" controlId="expenseForm.category">
+                        <Form.Label>Paid by</Form.Label>
+                        <Form.Select aria-label="Category" name="userId" onChange={this.handleChange} required>
+                            <option value="">Select User</option>
+                            {this.users.map((user) => {
+                                return (
+                                    <option key={user.userId} value={user.userId}>{user.userName}</option>
+                                )
+                            })
 
-                        }
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="expenseForm.date">
-                    <Form.Label>Date</Form.Label>
-                    <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
-                </Form.Group>
+                            }
+                        </Form.Select>
+                    </Form.Group>
+                    </Col>
+                    <Col xs md>
+                    <Form.Group className="" controlId="expenseForm.date">
+                        <Form.Label>Date</Form.Label>
+                        <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
+                    </Form.Group>
+                    </Col>
+                </Row>
                 <Form.Group className="mb-3" controlId="expenseForm.source">
-                    <Form.Label>Source</Form.Label>
+                    {/* <Form.Label>Source</Form.Label> */}
                     <Form.Select aria-label="Default select example" name="source" onChange={this.handleChange} required>
                         <option>Select Source</option>
                         {this.sourceMap.map((category) => {
@@ -351,6 +358,23 @@ class ExpenseForm extends React.Component {
 
                         }
                     </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3 mode-options" controlId="expenseForm.mode">
+                    {/* <Form.Label>Source</Form.Label> */}
+                    <Form.Check
+        
+            label={<CreditCard2FrontFill/>}
+            name="group1"
+            type="radio"
+            id={`reverse-radio-1`}
+          />
+          <Form.Check
+        
+            label={<CashCoin/>}
+            name="group1"
+            type="radio"
+            id={`reverse-radio-2`}
+          />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.category">
                     <Form.Label>Category</Form.Label>

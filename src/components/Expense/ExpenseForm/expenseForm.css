@@ -1,4 +1,7 @@
 
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
 
 input {
     background-color: transparent !important;
@@ -8,6 +11,18 @@ input {
 select {
     background-color: transparent !important;
     color: white !important;
+}
+
+.form-control{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+}
+
+.form-select{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
 }
 
 .form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -21,4 +36,25 @@ select {
 
 .form-control::-ms-input-placeholder { /* Microsoft Edge */
     color: rgb(143, 141, 141);
+}
+
+.form-check-input{
+    display: none;
+}
+
+.form-check-label{
+    font-size: 4rem;
+}
+
+.form-check-input:checked + .form-check-label{
+    color:#2db9c9;
+}
+
+.form-check{
+    float:left;
+    margin-left:2rem;
+}
+
+.mode-options{
+    margin-bottom: 1rem;
 }
