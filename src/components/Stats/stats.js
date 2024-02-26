@@ -1,15 +1,17 @@
 import React from 'react';
 
-import "./dashboard.css";
-import AreaGraph from './AreaGraph/areaGraph';
+import "./stats.css";
+
 import { Row, Col, Form } from "react-bootstrap";
-import ExpenseCategory from './ExpenseCategory/expenseCategory';
-import ExpenseHistory from '../Expense/History/history';
+import ReactApexChart from 'react-apexcharts';
 import { callGetExpenseListApi } from '../API/getExpenseList';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
+import ExpenseCategory from '../Dashboard/ExpenseCategory/expenseCategory';
+import AreaGraph from '../Dashboard/AreaGraph/areaGraph';
+import ExpenseHistory from '../Expense/History/history';
 
-class Dashboard extends React.Component {
+class Stats extends React.Component{
 
     constructor(props) {
         super(props);
@@ -17,6 +19,26 @@ class Dashboard extends React.Component {
         this.state = {
             users: [],
             selectedUsers: [],
+            series: [],
+
+            options: {
+                chart: {
+                    type: 'donut',
+
+                },
+                labels: [],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 400
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            },
             user: {
                 userId: ''
             }
@@ -48,8 +70,15 @@ class Dashboard extends React.Component {
                 }
             })
 
+            // console.log("list111....", userList);
+
+            // this.getExpenseList(this.state.user.userId, 5);
             this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
+            this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
+
+
+
 
             this.setState(prevState => ({
                 selectedUsers: [
@@ -92,6 +121,25 @@ class Dashboard extends React.Component {
                             totalExpense: Math.round(sum)
                         })
                     }
+                    else if (groupType === "type") {
+
+                        const types = [];
+                        const amounts = [];
+
+                        for (const [type, amount] of Object.entries(this.state.expenseListGroupBy.type)) {
+
+                            types.push(type);
+                            amounts.push(Math.round(amount));
+                        }
+                        this.setState(prevState => ({
+                            options: {
+                                ...prevState.options,
+                                labels: types
+                            },
+                            series: amounts
+
+                        }))
+                    }
                 });
             } else{
                     this.setState({
@@ -105,6 +153,7 @@ class Dashboard extends React.Component {
     }
 
     handleUserSelect = event => {
+
         const userId = event.target.id;
         const isChecked = event.target.checked;
 
@@ -130,6 +179,7 @@ class Dashboard extends React.Component {
 
         this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
         this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
+        this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
 
 
         this.setState(prevState => ({
@@ -164,8 +214,15 @@ class Dashboard extends React.Component {
                         <Row>
                             {this.renderModeOfExpenseCards()}
                         </Row>
+                        <h3>Top Categories</h3>
                         <Row>
-                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} title="Recent Expenses" limit={5} /> : ""}
+                            {this.renderPieChart()}
+                        </Row>
+                        <Row>
+                            {this.renderCategoryCards()}
+                        </Row>
+                        <Row>
+                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} title="Top Expenses" limit={5} /> : ""}
                         </Row>
                     </div>
                 }
@@ -189,11 +246,34 @@ class Dashboard extends React.Component {
         </Form>;
     }
 
+    renderPieChart() {
+        return this.state.series && this.state.series.length ? <Row>
+            <div className="chart" key="pie-chart">
+                <ReactApexChart options={this.state.options} series={this.state.series} type="donut" />
+            </div>
+        </Row> : ""
+
+    }
+
+    renderCategoryCards() {
+        return this.state.expenseListGroupBy !== null && this.state.expenseListGroupBy !== undefined
+            &&
+            this.state.expenseListGroupBy.type !== null && this.state.expenseListGroupBy.type !== undefined ?
+            Object.entries(this.state.expenseListGroupBy.type).map(([typeTitle, amount]) => {
+                return (
+                    <Col xs={6} key={`total_expense_${typeTitle}_${amount}`}>
+                        <ExpenseCategory title={typeTitle} limit={"40000"} amount={amount} />
+                    </Col>
+                );
+            })
+            : "";
+    }
+
     renderAreaGraph() {
         return this.state.expenseListGroupBy !== null && this.state.expenseListGroupBy !== undefined
             &&
             this.state.expenseListGroupBy.date !== null && this.state.expenseListGroupBy.date !== undefined ?
-            <AreaGraph type="area" key={`total_expense_${this.state.totalExpense}`} expenseListByDate={this.state.expenseListGroupBy.date} showCumulative={true}/>
+            <AreaGraph type="bar" key={`total_expense_${this.state.totalExpense}`} expenseListByDate={this.state.expenseListGroupBy.date} />
             : " ";
     }
 
@@ -221,4 +301,4 @@ class Dashboard extends React.Component {
 
 }
 
-export default Dashboard;
+export default Stats;

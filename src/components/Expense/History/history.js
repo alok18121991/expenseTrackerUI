@@ -14,7 +14,8 @@ class ExpenseHistory extends React.Component {
         this.state = {
             userId: '',
             expenseList: [],
-            limit: 5
+            limit: 5,
+            title: ""
         };
     }
 
@@ -22,7 +23,8 @@ class ExpenseHistory extends React.Component {
             this.setState({
                 ...this.state,
                 userId: this.props.user.userId,
-                limit: this.props.limit
+                limit: this.props.limit,
+                title: this.props.title
             }, () => {
                 this.getExpenseList(this.state.userId, this.state.limit);
             });
@@ -57,7 +59,7 @@ class ExpenseHistory extends React.Component {
     render() {
         return (
             <div>
-                <h2>Expense History</h2>
+                <h2>{this.state.title}</h2>
                 {this.state.expenseList != null && this.state.expenseList.map((expense, index) => {
                     return (
                         <div className="expense-card" key={index}>

@@ -10,6 +10,8 @@ import reportWebVitals from './reportWebVitals';
 import AddExpense from './components/Expense/AddExpense/addExpense';
 import ExpenseHistory from './components/Expense/History/history';
 import Dashboard from './components/Dashboard/dashboard';
+import Stats from './components/Stats/stats';
+import Settings from './components/Settings/Settings';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
@@ -49,9 +51,16 @@ const router = createBrowserRouter([
       },
       {
         path: "history",
-        element: <ExpenseHistory user={user} users={users} limit={0}/>,
+        element: <ExpenseHistory user={user} users={users} title="Expense History" limit={0}/>,
       },
-      
+      {
+        path: "stats",
+        element: <Stats user={user} users={users} limit={0}/>,
+      },
+      {
+        path: "settings",
+        element: <Settings user={user} users={users} limit={0}/>,
+      }
     ]
   }
 ]);

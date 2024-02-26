@@ -3,6 +3,13 @@
     filter: invert(1);
 }
 
+.expenseForm .form-label{
+    margin-top: 1rem;
+    color: gray;
+    text-transform: uppercase;
+}
+
+
 input {
     background-color: transparent !important;
     color: white !important;
@@ -15,13 +22,13 @@ select {
 
 .form-control{
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 7px solid #1d273f;
     border-radius: 0;
 }
 
 .form-select{
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 7px solid #1d273f;
     border-radius: 0;
 }
 
@@ -38,23 +45,42 @@ select {
     color: rgb(143, 141, 141);
 }
 
-.form-check-input{
-    display: none;
+.mode-options .form-check-input{
+    /* display: none; */
+    border-color: #49629e;;
 }
 
-.form-check-label{
+.mode-options .form-check-label{
+    color: #49629e;
     font-size: 4rem;
 }
 
-.form-check-input:checked + .form-check-label{
+.mode-options .form-check-input:checked + .form-check-label{
     color:#2db9c9;
 }
 
-.form-check{
+.mode-options .form-check{
     float:left;
-    margin-left:2rem;
+    margin-left: 20%;
 }
 
 .mode-options{
     margin-bottom: 1rem;
+}
+
+.title-amount{
+    width:70%;
+    margin: auto;
+}
+
+.add-expense-row {
+  margin-top: 2rem;
+}
+
+.add-expense-btn {
+    margin: auto;
+    width: auto;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 2rem;
 }

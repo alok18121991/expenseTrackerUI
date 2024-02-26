@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
     position: fixed;
-    box-shadow: 54px 0px 72px 24px rgba(102, 127, 169, 0.238);
+    /* box-shadow: 54px 0px 72px 24px rgba(102, 127, 169, 0.238); */
   }
   
   .footer-nav {
@@ -16,3 +16,12 @@
     padding-left: 1rem !important;
     padding-right:1rem !important;
   }
+
+  /*
+  #1D273F
+  #00C6BE
+  #FFF7D6
+
+  13.126.226.206
+
+  */
