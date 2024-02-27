@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import { callCreateExpenseApi } from '../../API/createExpenseApi';
 import './expenseForm.css';
 import { CashCoin, CreditCard2FrontFill } from 'react-bootstrap-icons';
+import { HttpStatusCode } from 'axios';
+import SuccessModal from '../../Components/Modal/SuccessModal/successModal';
 
 class ExpenseForm extends React.Component {
     constructor(props) {
@@ -15,14 +17,23 @@ class ExpenseForm extends React.Component {
             type: '',
             subType: '',
             description: '',
-            source: ''
+            source: '',
+            showModal: false
         };
     }
 
-    createExpense = event => {
+    createExpense(event) {
 
         event.preventDefault();
-        callCreateExpenseApi(this.state, event);
+        callCreateExpenseApi(this.state, event).then(response => {
+            if (response.status === HttpStatusCode.Ok) {
+                this.setState({
+                    ...this.state,
+                    showModal: true
+                });
+                event.target.reset();
+            }
+        });
 
     }
 
@@ -169,10 +180,6 @@ class ExpenseForm extends React.Component {
                 name: "Other",
                 value: "Other"
             },
-            {
-                name: "OTT",
-                value: "OTT"
-            },
         ],
         "Entertainment": [
             {
@@ -190,6 +197,10 @@ class ExpenseForm extends React.Component {
             {
                 name: "Sports",
                 value: "Sports"
+            },
+            {
+                name: "OTT",
+                value: "OTT"
             },
             {
                 name: "Other",
@@ -338,19 +349,24 @@ class ExpenseForm extends React.Component {
         });
     };
 
+    setModalShow(bool){
+        this.setState({
+            showModal: bool
+        });
+    }
+
     currentDateLimt = new Date().toISOString().split('T')[0];
 
     render() {
         return (
+            <>
             <Form onSubmit={(i) => this.createExpense(i)} className="expenseForm">
                 <Row>
                 <Form.Group className="mb-3 title-amount" controlId="exampleForm.description">
-                    {/* <Form.Label>Description</Form.Label> */}
                     <Form.Control type="text" placeholder="Enter Description" name="description" onChange={this.handleChange} />
                 </Form.Group>
                 </Row>
                 <Form.Group className="mb-3 title-amount" controlId="expenseForm.amount">
-                    {/* <Form.Label>Amount</Form.Label> */}
                     <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />
                 </Form.Group>
                 <Row className="">
@@ -436,6 +452,8 @@ class ExpenseForm extends React.Component {
                 </Button>
                 </Row>    
             </Form>
+            <SuccessModal show={this.state.showModal} onHide={() => this.setModalShow(false)} />
+            </>
         );
     }
 }

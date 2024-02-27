@@ -2,7 +2,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Col, Row } from 'react-bootstrap';
 import { Outlet } from "react-router-dom";
-import FooterMenu from './components/Footer/footerMenu';
+import FooterMenu from './pages/Footer/footerMenu';
 
 function App() {
   return (

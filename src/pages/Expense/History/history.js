@@ -15,7 +15,8 @@ class ExpenseHistory extends React.Component {
             userId: '',
             expenseList: [],
             limit: 5,
-            title: ""
+            title: "",
+            sortKey:"",
         };
     }
 
@@ -24,9 +25,10 @@ class ExpenseHistory extends React.Component {
                 ...this.state,
                 userId: this.props.user.userId,
                 limit: this.props.limit,
-                title: this.props.title
+                title: this.props.title,
+                sortKey: this.props.sortKey
             }, () => {
-                this.getExpenseList(this.state.userId, this.state.limit);
+                this.getExpenseList(this.state.userId, this.state.limit, this.state.sortKey);
             });
     }
 
@@ -36,8 +38,8 @@ class ExpenseHistory extends React.Component {
 
     }
 
-    getExpenseList(userId, limit) {
-        callGetExpenseListApi(userId, limit).then(response => {
+    getExpenseList(userId, limit, sortKey) {
+        callGetExpenseListApi(userId, limit, sortKey).then(response => {
             if (response.status === HttpStatusCode.Ok) {
                 this.setState({
                     ...this.state,
@@ -101,7 +103,6 @@ class ExpenseHistory extends React.Component {
                             </div>
                             <hr />
                         </div>
-
                     )
                 })
 
