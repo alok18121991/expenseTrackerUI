@@ -13,8 +13,8 @@ class FooterMenu extends React.Component {
                         <Link className="nav-link" to={`/`}><House color="grey" size={30} /></Link>
                         <Link className="nav-link" to={`/history`}><ArrowLeftRight color="grey" size={30} /></Link>
                         <Link className="nav-link" to={`/add`}><PlusCircleFill color="#2db9c9" size={50} /></Link>
-                        <Link className="nav-link" to={`/add`}><BarChart color="grey" size={30} /></Link>
-                        <Link className="nav-link" to={`/`}><Gear color="grey" size={30} /></Link>
+                        <Link className="nav-link" to={`/stats`}><BarChart color="grey" size={30} /></Link>
+                        <Link className="nav-link" to={`/settings`}><Gear color="grey" size={30} /></Link>
                     </Nav>
             </Navbar>
         )

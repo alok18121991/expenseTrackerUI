@@ -1,16 +1,18 @@
 import React from 'react';
 
-import "./dashboard.css";
-import AreaGraph from './AreaGraph/areaGraph';
-import { Row, Col, Form } from "react-bootstrap";
-import ExpenseCategory from './ExpenseCategory/expenseCategory';
-import ExpenseHistory from '../Expense/History/history';
+import "./stats.css";
+
+import { Row, Col } from "react-bootstrap";
 import ReactApexChart from 'react-apexcharts';
 import { callGetExpenseListApi } from '../API/getExpenseList';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
+import ExpenseCategory from '../Dashboard/ExpenseCategory/expenseCategory';
+import AreaGraph from '../Dashboard/AreaGraph/areaGraph';
+import ExpenseHistory from '../Expense/History/history';
+import UserList from '../Components/UserList/userList';
 
-class Dashboard extends React.Component {
+class Stats extends React.Component{
 
     constructor(props) {
         super(props);
@@ -69,9 +71,7 @@ class Dashboard extends React.Component {
                 }
             })
 
-            // console.log("list111....", userList);
 
-            // this.getExpenseList(this.state.user.userId, 5);
             this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
             this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
@@ -111,7 +111,7 @@ class Dashboard extends React.Component {
                 }), () => {
                     if (groupType === "mode") {
                         let sum = 0;
-                        for (const [mode, amount] of Object.entries(this.state.expenseListGroupBy.mode)) {
+                        for (const [, amount] of Object.entries(this.state.expenseListGroupBy.mode)) {
 
                             sum += amount;
                         }
@@ -152,9 +152,7 @@ class Dashboard extends React.Component {
     }
 
     handleUserSelect = event => {
-        // console.log("check....", event.target.id);
 
-        // console.log("check22....", event.target.checked);
         const userId = event.target.id;
         const isChecked = event.target.checked;
 
@@ -178,8 +176,6 @@ class Dashboard extends React.Component {
             }
         })
 
-        // console.log("list222....", userList.toString());
-
         this.getExpenseGroupByGroupType(userList.toString(), 1, "date");
         this.getExpenseGroupByGroupType(userList.toString(), 1, "mode");
         this.getExpenseGroupByGroupType(userList.toString(), 1, "type");
@@ -195,9 +191,9 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div>
-
+                <h2>This Month</h2>
                 <Row>
-                    {this.renderUserList()}
+                <UserList selectedUsers={this.state.selectedUsers} onChange={this.handleUserSelect}/>
                 </Row>
                 {this.state.totalExpense === 0 || this.state.totalExpense === undefined || this.state.totalExpense === null ?
                 <Row>
@@ -225,28 +221,12 @@ class Dashboard extends React.Component {
                             {this.renderCategoryCards()}
                         </Row>
                         <Row>
-                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} limit={5} /> : ""}
+                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} title="Top Expenses" sortKey="amount" limit={5} /> : ""}
                         </Row>
                     </div>
                 }
             </div>
         )
-    }
-
-    renderUserList() {
-        return <Form>
-            {this.state.selectedUsers && this.state.selectedUsers.map((user) => (
-                <div key={user.userId}>
-                    <Form.Check
-                        inline
-                        type='checkbox'
-                        id={user.userId}
-                        label={user.userName}
-                        checked={user.selected}
-                        onChange={this.handleUserSelect} />
-                </div>
-            ))}
-        </Form>;
     }
 
     renderPieChart() {
@@ -276,7 +256,7 @@ class Dashboard extends React.Component {
         return this.state.expenseListGroupBy !== null && this.state.expenseListGroupBy !== undefined
             &&
             this.state.expenseListGroupBy.date !== null && this.state.expenseListGroupBy.date !== undefined ?
-            <AreaGraph key={`total_expense_${this.state.totalExpense}`} expenseListByDate={this.state.expenseListGroupBy.date} />
+            <AreaGraph type="bar" key={`total_expense_${this.state.totalExpense}`} expenseListByDate={this.state.expenseListGroupBy.date} />
             : " ";
     }
 
@@ -304,4 +284,4 @@ class Dashboard extends React.Component {
 
 }
 
-export default Dashboard;
+export default Stats;

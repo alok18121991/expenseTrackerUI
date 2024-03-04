@@ -8,7 +8,7 @@ class AddExpense extends React.Component {
         return (
 
                 <div>
-                    <h3>Add Expense</h3>
+                    <h2>Add Expense</h2>
                     <ExpenseForm></ExpenseForm>
                 </div>
             

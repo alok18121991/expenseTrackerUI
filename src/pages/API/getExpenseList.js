@@ -1,18 +1,16 @@
 import axios from "axios";
 
 
-async function callGetExpenseListApi(userId, limit){
+async function callGetExpenseListApi(userId, limit, sortKey){
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-        const response = await axios.get(`${apiBaseUrl}/${userId}/${limit}`);
-        // console.log("callGetExpenseListApi response", response.data.data.data);
+        const response = await axios.get(`${apiBaseUrl}/${userId}/${sortKey}/${limit}`);
         return {
             error: null,
             data: response.data.data.data,
             status: response.status
         };
     } catch (error) {
-        // console.log("callGetExpenseListApi error ", error);
         return {
             error: error,
             data: null,

@@ -14,7 +14,8 @@ class AreaGraph extends React.Component {
                     enabled: false
                 },
                 chart: {
-                    id: "area-graph",
+                    type:"",
+                    id: "graph",
                     foreColor: "#ccc"
                 },
                 xaxis: {
@@ -33,7 +34,7 @@ class AreaGraph extends React.Component {
         const expenseListByDate = this.props.expenseListByDate;
         const dates = [];
         const amounts = [];
-        const cumulativeAmounts = [];
+        
 
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -45,10 +46,13 @@ class AreaGraph extends React.Component {
             amounts.push(Math.round(amount)); 
         }
 
+        const cumulativeAmounts = [];
+        if(this.props.showCumulative){
         let cumulativeSum = 0;
-        for (const amount1 of amounts) {
-            cumulativeSum += amount1;
-            cumulativeAmounts.push(cumulativeSum);
+            for (const amount1 of amounts) {
+                cumulativeSum += amount1;
+                cumulativeAmounts.push(cumulativeSum);
+            }
         }
 
         this.setState(prevState => ({
@@ -56,7 +60,10 @@ class AreaGraph extends React.Component {
                 ...prevState.options, 
                 xaxis: {
                     categories: dates 
-                }                
+                },
+                chart:{
+                    type: this.props.type
+                }               
             },
             series: [
                 {
@@ -76,12 +83,14 @@ class AreaGraph extends React.Component {
     render() {
         return (
                 <div className="mixed-chart">
+                    {this.state.options.chart.type !== "" ?
                     <Chart
                         options={this.state.options}
                         series={this.state.series}
-                        type="area"
+                        type={this.state.options.chart.type}
                         width="100%"
                     />
+                    : ""}
                 </div>
         )
     }

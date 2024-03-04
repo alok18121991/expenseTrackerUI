@@ -1,0 +1,86 @@
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.expenseForm .form-label{
+    margin-top: 1rem;
+    color: gray;
+    text-transform: uppercase;
+}
+
+
+input {
+    background-color: transparent !important;
+    color: white !important;
+}
+
+select {
+    background-color: transparent !important;
+    color: white !important;
+}
+
+.form-control{
+    border: none;
+    border-bottom: 7px solid #1d273f;
+    border-radius: 0;
+}
+
+.form-select{
+    border: none;
+    border-bottom: 7px solid #1d273f;
+    border-radius: 0;
+}
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(143, 141, 141);
+    opacity: 1; /* Firefox */
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgb(143, 141, 141);
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+    color: rgb(143, 141, 141);
+}
+
+.mode-options .form-check-input{
+    /* display: none; */
+    border-color: #49629e;;
+}
+
+.mode-options .form-check-label{
+    color: #49629e;
+    font-size: 4rem;
+}
+
+.mode-options .form-check-input:checked + .form-check-label{
+    color:#2db9c9;
+}
+
+.mode-options .form-check{
+    float:left;
+    margin-left: 20%;
+}
+
+.mode-options{
+    margin-bottom: 1rem;
+}
+
+.title-amount{
+    width:70%;
+    margin: auto;
+}
+
+.add-expense-row {
+  margin-top: 2rem;
+}
+
+.add-expense-btn {
+    margin: auto;
+    width: auto;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 2rem;
+}
