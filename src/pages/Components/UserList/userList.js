@@ -4,7 +4,7 @@ function UserList(props) {
 
     return <Form>
         {props.selectedUsers && props.selectedUsers.map((user) => (
-            <Col xs={6} className='user-list'>
+            <Col xs={6} className='user-list' key={user.userId}>
             <div key={user.userId}>
                 <Form.Check
                     type='checkbox'

@@ -1,10 +1,10 @@
 import axios from "axios";
 
 
-async function callGetExpenseListApi(userId, limit, sortKey){
+async function callGetExpenseListApi(userId, limit, sortKey, numMonth){
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-        const response = await axios.get(`${apiBaseUrl}/${userId}/${sortKey}/${limit}`);
+        const response = await axios.get(`${apiBaseUrl}/${userId}/${sortKey}/${limit}/${numMonth}`);
         return {
             error: null,
             data: response.data.data.data,

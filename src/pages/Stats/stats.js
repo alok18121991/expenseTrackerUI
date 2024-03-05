@@ -89,7 +89,7 @@ class Stats extends React.Component{
     }
 
     getExpenseList(userId, limit) {
-        callGetExpenseListApi(userId, limit).then(response => {
+        callGetExpenseListApi(userId, limit, 1).then(response => {
             if (response.status === HttpStatusCode.Ok) {
                 this.setState({
                     ...this.state,

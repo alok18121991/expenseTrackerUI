@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HttpStatusCode } from "axios";
 import { Col, Row } from 'react-bootstrap';
 import { BagFill, CurrencyRupee } from 'react-bootstrap-icons';
@@ -6,111 +6,94 @@ import moment from "moment";
 import "./history.css";
 import { callGetExpenseListApi } from '../../API/getExpenseList';
 import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
+// import { useLocation } from 'react-router-dom';
 
-class ExpenseHistory extends React.Component {
+function ExpenseHistory(props) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            userId: '',
-            expenseList: [],
-            limit: 5,
-            title: "",
-            sortKey:"",
-        };
-    }
+    const [expenseList, setExpenseList] = useState([]);
+    // const location = useLocation();
 
-    componentDidMount() {
-            this.setState({
-                ...this.state,
-                userId: this.props.user.userId,
-                limit: this.props.limit,
-                title: this.props.title,
-                sortKey: this.props.sortKey
-            }, () => {
-                this.getExpenseList(this.state.userId, this.state.limit, this.state.sortKey);
+    useEffect(() => {
+        getExpenseList();
+    }, [props.user.userId, props.limit, props.sortKey]);
+
+    const getExpenseList = () => {
+        callGetExpenseListApi(props.user.userId, props.limit, props.sortKey, 1)
+            .then(response => {
+                if (response.status === HttpStatusCode.Ok) {
+                    setExpenseList(response.data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching expense list:", error);
             });
-    }
+    };
 
-    deleteExpense(expenseId) {
+    const deleteExpense = (expenseId) => {
         callDeleteExpenseApi(expenseId)
-        this.getExpenseList(this.state.userId, this.state.limit);
+            .then(() => {
+                getExpenseList();
+            })
+            .catch(error => {
+                console.error("Error deleting expense:", error);
+            });
+    };
 
-    }
-
-    getExpenseList(userId, limit, sortKey) {
-        callGetExpenseListApi(userId, limit, sortKey).then(response => {
-            if (response.status === HttpStatusCode.Ok) {
-                this.setState({
-                    ...this.state,
-                    expenseList: response.data
-                });
-            }
-        });
-    }
-
-    getDateFormatted(dateString) {
+    const getDateFormatted = (dateString) => {
         let date = moment(dateString);
         return date.format("MMM DD, YYYY");
-    }
+    };
 
-    formatExpenseTitle(title) {
+    const formatExpenseTitle = (title) => {
         return title.length > 16 ? `${title.substring(0, 16)}...` : title;
-    }
+    };
 
-    render() {
-        return (
-            <div>
-                <h2>{this.state.title}</h2>
-                {this.state.expenseList != null && this.state.expenseList.map((expense, index) => {
-                    return (
-                        <div className="expense-card" key={index}>
-                            <div key={expense.id}>
+    return (
+        <div>
+            <h2>{props.title}</h2>
+            {expenseList.map((expense, index) => (
+                <div className="expense-card" key={index}>
+                    <div>
+                        <Row>
+                            <Col md={1} xs={2}>
+                                <BagFill color="#2db9c9" size={40} />
+                            </Col>
+                            <Col md={2} xs={4}>
                                 <Row>
-                                    <Col md={1} xs={2}>
-                                        <BagFill color="#2db9c9" size={40} />
-                                    </Col>
-                                    <Col md={2} xs={4}>
-                                        <Row>
-                                            <Col>
-                                                <div className='card-desc'>{this.formatExpenseTitle(expense.description)}</div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>
-                                                <div className='card-date'>
-                                                    {this.getDateFormatted(expense.expenseDate)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col xs={6}>
-                                        <Row>
-                                            <Col>
-                                                <div className='card-amount'><span><CurrencyRupee /></span>{expense.amount}</div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>
-                                                <div className='card-mode'>{expense.source}</div>
-                                            </Col>
-                                        </Row>
+                                    <Col>
+                                        <div className='card-desc'>{formatExpenseTitle(expense.description)}</div>
                                     </Col>
                                 </Row>
-                                {/* <div >
-                                    <button type="button" class="btn btn-danger" onClick={() => this.deleteExpense(`${expense.id}`)}>Delete</button>
-                                </div> */}
-                            </div>
-                            <hr />
-                        </div>
-                    )
-                })
-
-                }
-            </div>
-
-        )
-    }
+                                <Row>
+                                    <Col>
+                                        <div className='card-date'>
+                                            {getDateFormatted(expense.expenseDate)}
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={6}>
+                                <Row>
+                                    <Col>
+                                        <div className='card-amount'><span><CurrencyRupee /></span>{expense.amount}</div>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <div className='card-mode'>{expense.source}</div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                        {/* <div>
+                            <button type="button" className="btn btn-danger" onClick={() => deleteExpense(expense.id)}>Delete</button>
+                        </div> */}
+                    </div>
+                    <hr />
+                </div>
+            ))}
+        </div>
+    );
 }
 
 export default ExpenseHistory;

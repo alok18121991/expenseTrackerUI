@@ -1,8 +1,8 @@
 import axios from "axios";
 
-function callDeleteExpenseApi(expenseId){
+async function callDeleteExpenseApi(expenseId){
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-    axios.delete(`${apiBaseUrl}/${expenseId}`)
+    await axios.delete(`${apiBaseUrl}/${expenseId}`)
         .then(function (response) {
             // console.log("delete expenses resposne333: ", response);
             return {
