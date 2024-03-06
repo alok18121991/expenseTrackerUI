@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react"
 import { Link } from "react-router-dom";
+import "./groupHome.css";
 
 class GroupHome extends React.Component {
 
@@ -15,10 +16,6 @@ class GroupHome extends React.Component {
         this.setState(prevState => ({
             ...prevState,
             userData: this.props.userData,
-            user:{
-                ...prevState.user,
-                userName: "Shankar"
-            }
         }), () => {
             this.callGetGroupDetails(this.state.userData.groups.toString())
         })
@@ -41,27 +38,36 @@ class GroupHome extends React.Component {
         });
     }
 
-    
+
 
     render() {
-    
+
         return (
-            
+
             <div>
-                <h2>Group Home</h2>
-                {this.state.grouplist && this.state.grouplist.map((group, index) => {
-                    return (
-                        <h3 key={group.name} >{group.name}</h3>
-                    )
-                })}
-                {this.state.grouplist && this.state.userData && this.state.grouplist.map((group, index) => {
-                    return (
- 
-                           <Link key={group.id} className="nav-link" to='/history'  state={this.state.userData }>{group.name}</Link>
-                    )
-                })}
+                <h2>Groups</h2>
+                {
+                    this.state.grouplist && this.state.userData && this.state.grouplist.map((group, index) => {
+                        return (
+                            <div className="card-body card-body-main group-card">
+                                    <h3><Link key={group.id} className="nav-link" to='/'
+                                        state={{
+                                            user: {
+                                                id: this.state.userData.id,
+                                                fistName: this.state.userData.firstName,
+                                                lastName: this.state.userData.lastName
+                                            },
+                                            group: {
+                                                name: group.name,
+                                                owners: group.owners
+                                            }
 
+                                        }}>{group.name}</Link></h3>
+                            </div>
 
+                        )
+                    })
+                }
             </div>
         )
     }

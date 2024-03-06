@@ -27,7 +27,7 @@ class AreaGraph extends React.Component {
             },
             series: [],
 
-        };
+        }
     }
 
     componentDidMount() {
@@ -84,7 +84,7 @@ class AreaGraph extends React.Component {
         return (
                 <div className="mixed-chart">
                     {this.state.options.chart.type !== "" ?
-                    <Chart
+                    <Chart key={`area_graph_${this.props.id}`}
                         options={this.state.options}
                         series={this.state.series}
                         type={this.state.options.chart.type}

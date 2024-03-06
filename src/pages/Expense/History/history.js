@@ -15,10 +15,10 @@ function ExpenseHistory(props) {
 
     useEffect(() => {
         getExpenseList();
-    }, [props.user.userId, props.limit, props.sortKey]);
+    }, [props.user.id, props.limit, props.sortKey]);
 
     const getExpenseList = () => {
-        callGetExpenseListApi(props.user.userId, props.limit, props.sortKey, 1)
+        callGetExpenseListApi(props.user.id, props.limit, props.sortKey, 1)
             .then(response => {
                 if (response.status === HttpStatusCode.Ok) {
                     setExpenseList(response.data);

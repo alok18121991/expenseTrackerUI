@@ -30,8 +30,9 @@ function App() {
 
 
    let user = {
-  userId: '65bce7916e102aee72e6706a',
-  userName: "Alok Kumar Singh"
+  id: '65bce7916e102aee72e6706a',
+  firstName: "Alok",
+  lastName: "Kumar Singh"
 };
 
 let users = [
@@ -39,10 +40,10 @@ let users = [
       userId: '65bce7916e102aee72e6706a',
       userName: 'Alok Kumar Singh'
   },
-  {
-      userId: '65bd004222aa8c35198c22be',
-      userName: 'Rashi Vishwakarma'
-  }
+  // {
+  //     userId: '65bd004222aa8c35198c22be',
+  //     userName: 'Rashi Vishwakarma'
+  // }
 ];
 
 const router = userData && createBrowserRouter([
@@ -52,11 +53,11 @@ const router = userData && createBrowserRouter([
     children: [
       {
         path: "group",
-        element: <GroupHome user={user} users={users} userData={userData}/>,
+        element: <GroupHome user={user}  userData={userData}/>,
       },
       {
         path: "",
-        element: <Dashboard user={user} users={users} userData={userData}/>,
+        element: <Dashboard user={user} />,
       },
       {
         path: "add",

@@ -7,31 +7,51 @@ import ExpenseHistory from '../Expense/History/history';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
 import UserList from '../Components/UserList/userList';
+import { useLocation } from 'react-router-dom';
 
 function Dashboard(props) {
     const [user, setUser] = useState({});
-    const [, setUsers] = useState([]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [totalExpense, setTotalExpense] = useState(0);
     const [expenseListGroupByDate, setExpenseListGroupByDate] = useState({});
     const [expenseListGroupByMode, setExpenseListGroupByMode] = useState({});
 
-    useEffect(() => {
-        setUser(props.user);
-        setUsers(props.users);
-        setSelectedUsers(prevUsers => props.users.map(user => ({
-            ...user,
-            selected: user.userId === props.user.userId
-        })));
-    }, [props.user, props.users]);
+    const location = useLocation();
 
     useEffect(() => {
-        if (selectedUsers.length > 0) {
-            const userIds = selectedUsers.filter(user => user.selected).map(user => user.userId).join(',');
-            getExpenseGroupByGroupType(userIds, 1, "date");
-            getExpenseGroupByGroupType(userIds, 1, "mode");
+        if((location.state !== null) && location.state.user !== null){
+            setUser(location.state.user);
+            setUsers(location.state.group.owners);
+            setUsers(prevUsers => location.state.group.owners.map(user => ({
+                ...user,
+                selected: user.id === location.state.user.id
+            })));
         }
-    }, [selectedUsers]);
+        else{
+            setUser(props.user);
+            setUsers([props.user]);
+            setUsers(prevUsers => [props.user].map(user => ({
+                ...user,
+                selected: user.id === props.user.id
+            })));
+        }
+        
+       
+    }, [props.user, props.users, location.state]);
+
+    useEffect(() => {
+        if (users.length > 0) {
+            const userIds = users.filter(user => user.selected).map(user => user.id).join(',');
+            if(userIds.length >0) {
+                getExpenseGroupByGroupType(userIds, 1, "date");
+                getExpenseGroupByGroupType(userIds, 1, "mode");
+            }else{
+                setExpenseListGroupByMode({});
+                setExpenseListGroupByDate({});
+                setTotalExpense(0);
+            }
+        }
+    }, [users]);
 
     const getExpenseGroupByGroupType = (userId, monthCount, groupType) => {
         callGetExpenseByGroupApi(userId, monthCount, groupType).then(response => {
@@ -55,18 +75,21 @@ function Dashboard(props) {
     const handleUserSelect = event => {
         const userId = event.target.id;
         const isChecked = event.target.checked;
-        setSelectedUsers(prevUsers => prevUsers.map(user => ({
+        setUsers(prevUsers => prevUsers.map(user => ({
             ...user,
-            selected: user.userId === userId ? isChecked : user.selected
+            selected: user.id === userId ? isChecked : user.selected
         })));
     }
 
     const renderAreaGraph = () => {
-        return <AreaGraph type="area" key={`total_expense_${totalExpense}`} expenseListByDate={expenseListGroupByDate} showCumulative={true} />;
+        return  <Col key={`total_area_${totalExpense}`}>
+            <AreaGraph key={`area_graph_${totalExpense}`} type="area" id={totalExpense} expenseListByDate={expenseListGroupByDate} showCumulative={true} />
+        </Col>
     }
 
+
     const renderModeOfExpenseCards = () => {
-        return Object.entries(expenseListGroupByMode).map(([modeTitle, amount]) => (
+        return expenseListGroupByMode && Object.entries(expenseListGroupByMode).map(([modeTitle, amount]) => (
             <Col xs={6} key={`modeOfExpenseCard_${modeTitle}_${amount}`}>
                 <ExpenseCategory title={modeTitle} limit={"20000"} amount={amount} bgColor="transparent" />
             </Col>
@@ -83,9 +106,9 @@ function Dashboard(props) {
 
     return (
         <div>
-            <h2>This Month</h2>
+            <h2>{location.state !==null ? location.state.group.name : user.firstName} : This Month</h2>
             <Row>
-                <UserList selectedUsers={selectedUsers} onChange={handleUserSelect} />
+                <UserList selectedUsers={users} onChange={handleUserSelect} />
             </Row>
             {totalExpense === 0 || totalExpense === undefined || totalExpense === null ?
                 <Row>
@@ -105,7 +128,7 @@ function Dashboard(props) {
                         {renderModeOfExpenseCards()}
                     </Row>
                     <Row>
-                        {user.userId !== "" ? <ExpenseHistory user={user} title="Recent Expenses" sortKey="expenseDate" limit={5} /> : ""}
+                        {user && user.id !== "" ? <ExpenseHistory user={user} title="Recent Expenses" sortKey="expenseDate" limit={5} /> : ""}
                     </Row>
                 </>
             }
