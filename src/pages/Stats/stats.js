@@ -41,7 +41,7 @@ class Stats extends React.Component{
                 }]
             },
             user: {
-                userId: ''
+                id: ''
             }
         };
 
@@ -57,7 +57,7 @@ class Stats extends React.Component{
 
             let users = this.state.users;
             users.forEach(userObj => {
-                if (userObj.userId === this.state.user.userId) {
+                if (userObj.id === this.state.user.id) {
                     userObj.selected = true;
                 } else {
                     userObj.selected = false;
@@ -67,7 +67,7 @@ class Stats extends React.Component{
             let userList = [];
             users.forEach((obj) => {
                 if (obj.selected === true) {
-                    userList.push(obj.userId);
+                    userList.push(obj.id);
                 }
             })
 
@@ -153,13 +153,13 @@ class Stats extends React.Component{
 
     handleUserSelect = event => {
 
-        const userId = event.target.id;
+        const id = event.target.id;
         const isChecked = event.target.checked;
 
         let users = this.state.selectedUsers;
 
         users.forEach(userObj => {
-            if (userObj.userId === userId) {
+            if (userObj.id === id) {
                 if (isChecked) {
                     userObj.selected = true;
                 }
@@ -172,7 +172,7 @@ class Stats extends React.Component{
         let userList = [];
         users.forEach((obj) => {
             if (obj.selected === true) {
-                userList.push(obj.userId);
+                userList.push(obj.id);
             }
         })
 
@@ -221,7 +221,7 @@ class Stats extends React.Component{
                             {this.renderCategoryCards()}
                         </Row>
                         <Row>
-                            {this.state.user.userId !== "" ? <ExpenseHistory user={this.state.user} title="Top Expenses" sortKey="amount" limit={5} /> : ""}
+                            {this.state.user.id !== "" ? <ExpenseHistory user={this.state.user} title="Top Expenses" sortKey="amount" limit={5} /> : ""}
                         </Row>
                     </div>
                 }
