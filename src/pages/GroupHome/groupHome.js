@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react"
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./groupHome.css";
 
 class GroupHome extends React.Component {
@@ -23,7 +23,7 @@ class GroupHome extends React.Component {
     };
 
     callGetGroupDetails(ids) {
-        axios.get("http://192.168.1.4:8080/groups", {
+        axios.get("http://192.168.1.5:8080/groups", {
 
             params: {
                 group_ids: ids
@@ -49,8 +49,8 @@ class GroupHome extends React.Component {
                 {
                     this.state.grouplist && this.state.userData && this.state.grouplist.map((group, index) => {
                         return (
-                            <div className="card-body card-body-main group-card">
-                                    <h3><Link key={group.id} className="nav-link" to='/'
+                            <div className="card-body card-body-main group-card" key={group.id}>
+                                    <h3><NavLink key={group.id} className="nav-link" to='/group/history'
                                         state={{
                                             user: {
                                                 id: this.state.userData.id,
@@ -58,11 +58,12 @@ class GroupHome extends React.Component {
                                                 lastName: this.state.userData.lastName
                                             },
                                             group: {
+                                                id: group.id,
                                                 name: group.name,
                                                 owners: group.owners
                                             }
 
-                                        }}>{group.name}</Link></h3>
+                                        }}>{group.name}</NavLink></h3>
                             </div>
 
                         )

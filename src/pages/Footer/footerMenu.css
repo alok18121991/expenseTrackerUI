@@ -16,6 +16,9 @@
     padding-left: 1rem !important;
     padding-right:1rem !important;
   }
+  .nav-link::active {
+    color:aliceblue
+  }
 
   /*
   #1D273F

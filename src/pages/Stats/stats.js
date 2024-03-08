@@ -213,7 +213,7 @@ class Stats extends React.Component{
                         <Row>
                             {this.renderModeOfExpenseCards()}
                         </Row>
-                        <h3>Top Categories</h3>
+                        <h3>Categories</h3>
                         <Row>
                             {this.renderPieChart()}
                         </Row>

@@ -18,6 +18,7 @@ class ExpenseForm extends React.Component {
             subType: '',
             description: '',
             source: '',
+            group:'65e0d2b9c6aac0cb5c713767',
             showModal: false
         };
     }

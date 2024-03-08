@@ -10,13 +10,14 @@ import Settings from './pages/Settings/Settings';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import GroupHome from './pages/GroupHome/groupHome';
+import ErrorPage from './pages/error-page';
 
 function App() {
 
   const [userData, setUserData] = useState();
 
   useEffect(() => {
-    axios.get('http://192.168.1.4:8080/user/65bce7916e102aee72e6706a')
+    axios.get('http://192.168.1.5:8080/user/65bce7916e102aee72e6706a')
       .then(response => {
         console.log("resss....", response)
         setUserData(response.data.data.data);
@@ -50,18 +51,16 @@ const router = userData && createBrowserRouter([
   {
     path: "/",
     element: <MainContainer />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        path: "group",
-        element: <GroupHome user={user}  userData={userData}/>,
-      },
+      
       {
         path: "",
         element: <Dashboard user={user} />,
       },
       {
         path: "add",
-        element: <AddExpense />,
+        element: <AddExpense user={user}/>,
       },
       {
         path: "history",
@@ -74,7 +73,15 @@ const router = userData && createBrowserRouter([
       {
         path: "settings",
         element: <Settings user={user} users={users} limit={0}/>,
-      }
+      },
+      {
+        path: "group",
+        element: <GroupHome user={user}  userData={userData}/>
+      },
+      {
+        path: "group/history", 
+        element: <ExpenseHistory user={user} users={users} title="Expense History" sortKey="expenseDate" limit={0}/>,
+      },
     ]
   }
 ]);
