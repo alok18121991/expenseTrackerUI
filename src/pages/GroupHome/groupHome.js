@@ -23,7 +23,7 @@ class GroupHome extends React.Component {
     };
 
     callGetGroupDetails(ids) {
-        axios.get("http://192.168.1.5:8080/groups", {
+        axios.get("http://192.168.1.7:8080/groups", {
 
             params: {
                 group_ids: ids
@@ -50,8 +50,8 @@ class GroupHome extends React.Component {
                     this.state.grouplist && this.state.userData && this.state.grouplist.map((group, index) => {
                         return (
                             <div className="card-body card-body-main group-card" key={group.id}>
-                                    <h3><NavLink key={group.id} className="nav-link" to='/group/history'
-                                        state={{
+                                    {/* <h3><NavLink key={group.id} className="nav-link" to='/group/history' */}
+                                    <h3><NavLink key={group.id} className="nav-link" to='/'                                        state={{
                                             user: {
                                                 id: this.state.userData.id,
                                                 fistName: this.state.userData.firstName,

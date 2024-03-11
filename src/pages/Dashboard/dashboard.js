@@ -24,7 +24,7 @@ function Dashboard(props) {
             setUsers(location.state.group.owners);
             setUsers(prevUsers => location.state.group.owners.map(user => ({
                 ...user,
-                selected: user.id === location.state.user.id
+                selected: true
             })));
         }
         else{
