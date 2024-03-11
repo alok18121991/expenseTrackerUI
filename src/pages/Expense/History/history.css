@@ -58,9 +58,12 @@ h2 {
 }
 
 .list-divider{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
     width: 43%;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: #343a40;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
     margin-left: 30%;

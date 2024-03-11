@@ -17,6 +17,8 @@ function ExpenseHistory(props) {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const showDivider = props.showDivider !== null || (location.state && location.state.showDivider)? props.showDivider || (location.state && location.state.showDivider) : true;
+
     // const [userId, setUserId] = useState("");
     const handleClose = (e) => {
         setShow(false);
@@ -104,7 +106,8 @@ function ExpenseHistory(props) {
                 id: props.user.id,
                 fistName: props.user.firstName,
                 lastName: props.user.lastName
-            }
+            },
+            showDivider: true
         }
         
         if(location.state && location.state.group){
@@ -119,7 +122,7 @@ function ExpenseHistory(props) {
             }
         }
         else return historystate;
-        // return historystate;
+        // return historytate;
     }
 
     let prevDate = "";
@@ -128,7 +131,7 @@ function ExpenseHistory(props) {
         prevDate = getDateFormatted(prevDate)
         if (prevDate === "" || (date) !== (prevDate)) {
             prevDate = date //initialize prevDate
-            return <div className="list-divider">{date}</div>
+            return <div className="list-divider" key={date}>{date}</div>
         }
     }
 
@@ -140,7 +143,6 @@ function ExpenseHistory(props) {
             </>
             <Row>
                 <Col xs={10}>
-                    {/* {console.log("yeyeyeyy", location.state !=null && ((location.state.group !== null) && location.state.group.name !== null) )} */}
                     <h2>{location.state && ((location.state.group) && location.state.group.name) ? location.state.group.name : props.user.firstName} : {props.title}</h2>
                 </Col>
                 <Col xs={2}>
@@ -149,9 +151,9 @@ function ExpenseHistory(props) {
                 </Col>
             </Row>
 
-            {expenseList && expenseList.map((expense, index) => (
+            {expenseList.map((expense, index) => (
                 <>
-                {renderDivider(expense.expenseDate)}
+                { showDivider && renderDivider(expense.expenseDate)}
                 <div className="expense-card" key={expense.id} onClick={() => toggleExpense(expense.id)}>
                     <div>
                         <Row>

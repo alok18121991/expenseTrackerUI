@@ -128,7 +128,7 @@ function Dashboard(props) {
                         {renderModeOfExpenseCards()}
                     </Row>
                     <Row>
-                        {user && user.id !== "" ? <ExpenseHistory user={user} title="Recent Expenses" sortKey="expenseDate" limit={5} /> : ""}
+                        {user && user.id !== "" ? <ExpenseHistory user={user} title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
                     </Row>
                 </>
             }

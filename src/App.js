@@ -17,7 +17,7 @@ function App() {
   const [userData, setUserData] = useState();
 
   useEffect(() => {
-    axios.get('http://192.168.1.5:8080/user/65bce7916e102aee72e6706a')
+    axios.get('http://192.168.1.7:8080/user/65bce7916e102aee72e6706a')
       .then(response => {
         console.log("resss....", response)
         setUserData(response.data.data.data);
@@ -64,7 +64,7 @@ const router = userData && createBrowserRouter([
       },
       {
         path: "history",
-        element: <ExpenseHistory user={user} users={users} title="Expense History" sortKey="expenseDate" limit={0}/>,
+        element: <ExpenseHistory user={user} users={users} title="Expense History" sortKey="expenseDate" limit={0} showDivider={true}/>,
       },
       {
         path: "stats",
