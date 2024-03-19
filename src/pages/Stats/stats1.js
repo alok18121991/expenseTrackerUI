@@ -1,24 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
-import "./dashboard.css";
-import AreaGraph from './AreaGraph/areaGraph';
+import "./stats1.css";
 import { Row, Col } from "react-bootstrap";
-import ExpenseCategory from './ExpenseCategory/expenseCategory';
-import ExpenseHistory from '../Expense/History/history';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
 import UserList from '../Components/UserList/userList';
 import { useLocation } from 'react-router-dom';
-import { ActiveGroupContext, UserContext } from '../Components/Context/context';
+import AreaGraph from '../Dashboard/AreaGraph/areaGraph';
+import ExpenseCategory from '../Dashboard/ExpenseCategory/expenseCategory';
+import ExpenseHistory from '../Expense/History/history';
+import PieDonutChart from '../Components/Graph/pieDonutChart';
+import { UserContext } from '../Components/Context/context';
 
-function Dashboard(props) {
+function Stats1(props) {
     const activeUser = useContext(UserContext);
-    const [activeGroup, ] = useContext(ActiveGroupContext);
     const [user, ] = useState(activeUser);
     const [users, setUsers] = useState([]);
     const [totalExpense, setTotalExpense] = useState(0);
     const [expenseListGroupByDate, setExpenseListGroupByDate] = useState({});
     const [expenseListGroupByMode, setExpenseListGroupByMode] = useState({});
-   
+    const [expenseListGroupByType, setExpenseListGroupByType] = useState({});
+    const [pieChartTypes, setPieChartTypes] = useState({});
+    const [pieChartSeries, setPieChartSeries] = useState({});
 
     const location = useLocation();
 
@@ -49,9 +51,11 @@ function Dashboard(props) {
             if(userIds.length >0) {
                 getExpenseGroupByGroupType(userIds, 1, "date");
                 getExpenseGroupByGroupType(userIds, 1, "mode");
+                getExpenseGroupByGroupType(userIds, 1, "type");
             }else{
                 setExpenseListGroupByMode({});
                 setExpenseListGroupByDate({});
+                setExpenseListGroupByType({});
                 setTotalExpense(0);
             }
         }
@@ -65,12 +69,36 @@ function Dashboard(props) {
                     let sum = Object.values(response.data).reduce((acc, curr) => acc + curr, 0);
                     setTotalExpense(sum);
                 }
-                if (groupType === "date") {
+                else if (groupType === "date") {
                     setExpenseListGroupByDate(response.data);
+                }
+                else if (groupType === "type") {
+                    setExpenseListGroupByType(response.data);
+
+                    const types = [];
+                    const amounts = [];
+
+                    for (const [type, amount] of Object.entries(response.data)) {
+
+                        types.push(type);
+                        amounts.push(Math.round(amount));
+                    }
+
+                    setPieChartTypes(types);
+                    setPieChartSeries(amounts);
+                    // this.setState(prevState => ({
+                    //     options: {
+                    //         ...prevState.options,
+                    //         labels: types
+                    //     },
+                    //     series: amounts
+
+                    // }))
                 }
             } else {
                 setExpenseListGroupByMode({});
                 setExpenseListGroupByDate({});
+                setExpenseListGroupByType({});
                 setTotalExpense(0);
             }
         })
@@ -108,9 +136,27 @@ function Dashboard(props) {
         );
     }
 
+    const renderPieChart = () => {
+        return pieChartSeries && <Row>
+            <div className="chart" key="pie-chart">
+                <PieDonutChart labels={pieChartTypes} series={pieChartSeries} />
+            </div>
+        </Row> 
+
+    }
+
+    const renderCategoryCards = () => {
+        return expenseListGroupByType && Object.entries(expenseListGroupByType).map(([typeTitle, amount]) => {
+                return (
+                    <Col xs={6} key={`total_expense_${typeTitle}_${amount}`}>
+                        <ExpenseCategory title={typeTitle} limit={"40000"} amount={amount} />
+                    </Col>
+                );
+            })
+    }
+
     return (
         <div>
-            {console.log("active groupppp.....", activeGroup)}
             <h2>{location.state !==null ? location.state.group.name : user.firstName} : This Month</h2>
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
@@ -132,8 +178,15 @@ function Dashboard(props) {
                     <Row>
                         {renderModeOfExpenseCards()}
                     </Row>
+                    <h3>Categories</h3>
+                        <Row>
+                            {renderPieChart()}
+                        </Row>
+                        <Row>
+                            {renderCategoryCards()}
+                        </Row>
                     <Row>
-                        {user && user.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
+                        {user && user.id !== "" ? <ExpenseHistory user={user} title="Recent Expenses" sortKey="amount" limit={5} showDivider={false}/> : ""}
                     </Row>
                 </>
             }
@@ -141,4 +194,4 @@ function Dashboard(props) {
     );
 }
 
-export default Dashboard;
+export default Stats1;

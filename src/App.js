@@ -11,13 +11,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import GroupHome from './pages/GroupHome/groupHome';
 import ErrorPage from './pages/error-page';
+import Stats1 from './pages/Stats/stats1';
+import { ActiveGroupContext, UserContext } from './pages/Components/Context/context';
 
 function App() {
 
   const [userData, setUserData] = useState();
+  const [activeGroup, setActiveGroup] = useState();
 
   useEffect(() => {
-    axios.get('http://192.168.1.7:8080/user/65bce7916e102aee72e6706a')
+    axios.get('http://192.168.1.8:8080/user/65bce7916e102aee72e6706a')
       .then(response => {
         console.log("resss....", response)
         setUserData(response.data.data.data);
@@ -56,31 +59,32 @@ const router = userData && createBrowserRouter([
       
       {
         path: "",
-        element: <Dashboard user={user} />,
+        element: <Dashboard />,
       },
       {
         path: "add",
-        element: <AddExpense user={user}/>,
+        element: <AddExpense />,
       },
       {
         path: "history",
-        element: <ExpenseHistory user={user} users={users} title="Expense History" sortKey="expenseDate" limit={0} showDivider={true}/>,
+        element: <ExpenseHistory title="Expense History" sortKey="expenseDate" limit={0} showDivider={true}/>,
       },
       {
         path: "stats",
-        element: <Stats user={user} users={users} limit={0}/>,
+        // element: <Stats user={user} users={users} limit={0}/>,
+        element: <Stats1 limit={0}/>,
       },
       {
         path: "settings",
-        element: <Settings user={user} users={users} limit={0}/>,
+        element: <Settings limit={0}/>,
       },
       {
         path: "group",
-        element: <GroupHome user={user}  userData={userData}/>
+        element: <GroupHome />
       },
       {
         path: "group/history", 
-        element: <ExpenseHistory user={user} users={users} title="Expense History" sortKey="expenseDate" limit={0}/>,
+        element: <ExpenseHistory title="Expense History" sortKey="expenseDate" limit={0}/>,
       },
     ]
   }
@@ -89,9 +93,13 @@ const router = userData && createBrowserRouter([
   
 
   return (
-    <div className="App">
-       {userData && <RouterProvider router={router} />}
-    </div>
+    <UserContext.Provider value={userData}>
+      <ActiveGroupContext.Provider value={[activeGroup, setActiveGroup]}>
+        <div className="App">
+          {userData && <RouterProvider router={router} />}
+        </div>
+    </ActiveGroupContext.Provider>
+    </UserContext.Provider>
   );
 }
 

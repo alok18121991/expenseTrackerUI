@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HttpStatusCode } from "axios";
 import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { ArrowRight, BagFill, CurrencyRupee } from 'react-bootstrap-icons';
@@ -7,6 +7,7 @@ import "./history.css";
 import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
 import { callGetExpenseListForGroupUsersApi } from '../../API/getExpenseListForGroupUsers';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
 function ExpenseHistory(props) {
 
@@ -16,6 +17,9 @@ function ExpenseHistory(props) {
     const [show, setShow] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const activeUser = useContext(UserContext);
+    const [activeGroup, ] = useContext(ActiveGroupContext);
 
     const showDivider = props.showDivider !== null || (location.state && location.state.showDivider)? props.showDivider || (location.state && location.state.showDivider) : true;
 
@@ -33,7 +37,6 @@ function ExpenseHistory(props) {
     useEffect(() => {
         if (location.state != null && location.state.group != null) {
             setGroupId(location.state.group.id);
-            // setUserId("");
         }
         getExpenseList();
     }, [props.limit, props.sortKey, location]);
@@ -66,7 +69,7 @@ function ExpenseHistory(props) {
         else {
             params = {
                 ...params,
-                "userIds": props.user.id
+                "userIds": activeUser.id
 
             }
         }
@@ -102,11 +105,6 @@ function ExpenseHistory(props) {
 
     const getExpenseHistoryState = () => {
         let historystate = {
-            user: {
-                id: props.user.id,
-                fistName: props.user.firstName,
-                lastName: props.user.lastName
-            },
             showDivider: true
         }
         
@@ -122,7 +120,6 @@ function ExpenseHistory(props) {
             }
         }
         else return historystate;
-        // return historytate;
     }
 
     let prevDate = "";
@@ -136,26 +133,26 @@ function ExpenseHistory(props) {
     }
 
     return (
-        <div >
-            <>
+        <div key="expense-list" >
+            {console.log("history active group....", activeGroup)}
+            <div key="navigation-btn" >
                 <button onClick={() => navigate(-1)}>go back</button>
                 <button onClick={() => navigate(1)}>go forward</button>
-            </>
+            </div>
             <Row>
                 <Col xs={10}>
-                    <h2>{location.state && ((location.state.group) && location.state.group.name) ? location.state.group.name : props.user.firstName} : {props.title}</h2>
+                    <h2 key="title">{location.state && ((location.state.group) && location.state.group.name) ? location.state.group.name : activeUser.firstName} : {props.title}</h2>
                 </Col>
                 <Col xs={2}>
-                    <NavLink key="view all history" className="nav-link" to='/group/history'
+                    <NavLink key="view all history" className="nav-link" to='/history'
                         state={getExpenseHistoryState()}><ArrowRight /></NavLink>
                 </Col>
             </Row>
 
-            {expenseList.map((expense, index) => (
-                <>
+            {expenseList && expenseList.map((expense, index) => (
+                <div key={`${expense.id}_${index}_div`}>
                 { showDivider && renderDivider(expense.expenseDate)}
-                <div className="expense-card" key={expense.id} onClick={() => toggleExpense(expense.id)}>
-                    <div>
+                <div className="expense-card" key={`${expense.id}_${index}`} onClick={() => toggleExpense(expense.id)}>
                         <Row>
                             <Col md={1} xs={2}>
                                 <BagFill color="#2db9c9" size={40} />
@@ -175,7 +172,7 @@ function ExpenseHistory(props) {
                                 </Row> */}
                                 <Row>
                                     {
-                                        expense.userId === props.user.id ?
+                                        expense.userId === activeUser.id ?
                                             <Col className='card-user'>
                                                 Paid by you
                                             </Col>
@@ -200,7 +197,7 @@ function ExpenseHistory(props) {
                             </Col>
                         </Row>
                         {selectedExpenses.find(expenseId => expenseId === expense.id) &&
-                            <>
+                            <div key={`${expense.id}_modal`}>
                                 <Row className="expense-extend-row" >
                                     <Col xs={6} className="expense-extend">
                                         <button type="button" className="btn btn-danger" onClick={handleShow}>Delete</button>
@@ -226,13 +223,12 @@ function ExpenseHistory(props) {
 
                                     </Modal.Footer>
                                 </Modal>
-                            </>
+                            </div>
                         }
-                    </div>
                     <hr />
 
                 </div>
-                </>
+                </div>
             ))}
 
         </div>

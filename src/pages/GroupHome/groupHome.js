@@ -1,77 +1,63 @@
 import axios from "axios";
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { NavLink } from "react-router-dom";
 import "./groupHome.css";
+import { ActiveGroupContext, UserContext } from "../Components/Context/context";
 
-class GroupHome extends React.Component {
+function GroupHome() {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        }
-    };
+    const activeUser = useContext(UserContext);
+    const [, setActiveGroup] = useContext(ActiveGroupContext);
+    const [groups, setGroups] = useState();
 
-    componentDidMount() {
-        this.setState(prevState => ({
-            ...prevState,
-            userData: this.props.userData,
-        }), () => {
-            this.callGetGroupDetails(this.state.userData.groups.toString())
-        })
+    useEffect(() => {
+        callGetGroupDetails(activeUser.groups.toString())
+    }, [activeUser.groups])
 
-    };
-
-    callGetGroupDetails(ids) {
-        axios.get("http://192.168.1.7:8080/groups", {
-
+    const callGetGroupDetails = (ids) => {
+        axios.get("http://192.168.1.8:8080/groups", {
             params: {
                 group_ids: ids
             }
         }).then(response => {
-            this.setState(prevState => ({
-                ...prevState,
-                grouplist: response.data
-            }))
+            setGroups(response.data);
+
         }).catch(error => {
             console.log("errrr..33..", error)
         });
     }
 
+    const setStateToLink = (group) => {
+        return {
+            group: {
+                id: group.id,
+                name: group.name,
+                owners: group.owners
+            }
 
-
-    render() {
-
-        return (
-
-            <div>
-                <h2>Groups</h2>
-                {
-                    this.state.grouplist && this.state.userData && this.state.grouplist.map((group, index) => {
-                        return (
-                            <div className="card-body card-body-main group-card" key={group.id}>
-                                    {/* <h3><NavLink key={group.id} className="nav-link" to='/group/history' */}
-                                    <h3><NavLink key={group.id} className="nav-link" to='/'                                        state={{
-                                            user: {
-                                                id: this.state.userData.id,
-                                                fistName: this.state.userData.firstName,
-                                                lastName: this.state.userData.lastName
-                                            },
-                                            group: {
-                                                id: group.id,
-                                                name: group.name,
-                                                owners: group.owners
-                                            }
-
-                                        }}>{group.name}</NavLink></h3>
-                            </div>
-
-                        )
-                    })
-                }
-            </div>
-        )
+        }
     }
+
+    return (
+        <div>
+            <h2>Groups</h2>
+            {
+                groups && groups.map((group, index) => {
+                    return (
+                        
+                        <div className="card-body card-body-main group-card" key={group.id}>
+                            {/* {setActiveGroup(group)}
+                           {console.log("activeGroip......", activeGroup)} */}
+                            {/* <h3><NavLink key={group.id} className="nav-link" to='/group/history' */}
+                            <h3><NavLink key={group.id} className="nav-link" to='/'
+                                state={setStateToLink(group)} onClick={()=>setActiveGroup(group)}>{group.name}</NavLink></h3>
+                        </div>
+
+                    )
+                })
+            }
+        </div>
+    )
 }
 
 export default GroupHome

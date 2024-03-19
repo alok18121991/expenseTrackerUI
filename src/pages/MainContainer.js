@@ -6,25 +6,7 @@ import FooterMenu from "./Footer/footerMenu";
 
 
 
-class MainContainer extends React.Component {
-
-  user = {
-    userId: '65bce7916e102aee72e6706a',
-    userName: "Alok Kumar Singh"
-  };
-  
-  users = [
-    {
-        userId: '65bce7916e102aee72e6706a',
-        userName: 'Alok Kumar Singh'
-    },
-    {
-        userId: '65bd004222aa8c35198c22be',
-        userName: 'Rashi Vishwakarma'
-    }
-  ];
-
-  render() {
+function MainContainer() {
     return (
       <Container>
         <Row className="App-header">
@@ -37,7 +19,6 @@ class MainContainer extends React.Component {
         </Row>
       </Container>
     )
-  }
 }
 
 export default MainContainer;
