@@ -6,7 +6,7 @@ import moment from "moment";
 import "./history.css";
 import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
 import { callGetExpenseListForGroupUsersApi } from '../../API/getExpenseListForGroupUsers';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
 function ExpenseHistory(props) {
@@ -22,10 +22,10 @@ function ExpenseHistory(props) {
         "userIds": activeGroup && activeGroup.name !== "MyGroup" ? "" : activeUser.id,
         "limit": props.limit,
         "sortKey": props.sortKey,
-        "numMonth": 1
+        "numMonth": props.monthCount ? props.monthCount : 1
     });
     // const location = useLocation();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const showDivider = props.showDivider !== null ? props.showDivider  : true;
 
@@ -40,8 +40,13 @@ function ExpenseHistory(props) {
 
 
     useEffect(() => {
-        getExpenseList(expenseListParams);
-    }, [expenseListParams]);
+        getExpenseList({
+            ...expenseListParams,
+            "limit": props.limit,
+            "sortKey": props.sortKey,
+            "numMonth": props.monthCount ? props.monthCount : 1
+        });
+    }, [expenseListParams, props.monthCount, props.sortKey, props.limit]);
 
     const toggleExpense = (id) => {
         let expenseId = selectedExpenses.find(expenseId => expenseId === id);
@@ -96,10 +101,10 @@ function ExpenseHistory(props) {
 
     return (
         <div key="expense-list" >
-            <div key="navigation-btn" >
+            {/* <div key="navigation-btn" >
                 <button onClick={() => navigate(-1)}>go back</button>
                 <button onClick={() => navigate(1)}>go forward</button>
-            </div>
+            </div> */}
             <Row>
                 <Col xs={10}>
                     <h2 key="title">{ activeGroup ? activeGroup.name : activeUser.firstName} : {props.title}</h2>

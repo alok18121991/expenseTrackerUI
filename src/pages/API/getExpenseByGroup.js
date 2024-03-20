@@ -12,14 +12,12 @@ async function callGetExpenseByGroupTypeApi(userIds, numMonths, groupType) {
             }
         }
         );
-        // console.log("callGetExpenseByGroupApi response", response.data.data.data);
         return {
             error: null,
             data: response.data.data.data,
             status: response.status
         };
     } catch (error) {
-        // console.log("callGetExpenseByGroupApi error ", error);
         return {
             error: error,
             data: null,

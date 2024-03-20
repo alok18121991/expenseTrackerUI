@@ -21,6 +21,7 @@ function Stats() {
     const [expenseListGroupByType, setExpenseListGroupByType] = useState({});
     const [pieChartTypes, setPieChartTypes] = useState({});
     const [pieChartSeries, setPieChartSeries] = useState({});
+    const [monthCount, setMonthCount] = useState(1);
 
     useEffect(() => {
         if(activeGroup && activeGroup.name !== "MyGroup"){
@@ -43,9 +44,9 @@ function Stats() {
         if (users.length > 0) {
             const userIds = users.filter(user => user.selected).map(user => user.id).join(',');
             if(userIds.length >0) {
-                getExpenseGroupByGroupType(userIds, 1, "date");
-                getExpenseGroupByGroupType(userIds, 1, "mode");
-                getExpenseGroupByGroupType(userIds, 1, "type");
+                getExpenseGroupByGroupType(userIds, monthCount, "date");
+                getExpenseGroupByGroupType(userIds, monthCount, "mode");
+                getExpenseGroupByGroupType(userIds, monthCount, "type");
             }else{
                 setExpenseListGroupByMode({});
                 setExpenseListGroupByDate({});
@@ -53,7 +54,7 @@ function Stats() {
                 setTotalExpense(0);
             }
         }
-    }, [users]);
+    }, [users, monthCount]);
 
     const getExpenseGroupByGroupType = (userId, monthCount, groupType) => {
         callGetExpenseByGroupApi(userId, monthCount, groupType).then(response => {
@@ -101,7 +102,7 @@ function Stats() {
 
     const renderAreaGraph = () => {
         return  <Col key={`total_area_${totalExpense}`}>
-            <AreaGraph key={`area_graph_${totalExpense}`} type="area" id={totalExpense} expenseListByDate={expenseListGroupByDate} showCumulative={true} />
+            <AreaGraph key={`area_graph_${totalExpense}`} type="bar" id={totalExpense} expenseListByDate={expenseListGroupByDate} showCumulative={true} />
         </Col>
     }
 
@@ -131,6 +132,10 @@ function Stats() {
 
     }
 
+    const updateMonth = (monthCount) => {
+        setMonthCount(monthCount)
+    }
+
     const renderCategoryCards = () => {
         return expenseListGroupByType && Object.entries(expenseListGroupByType).map(([typeTitle, amount]) => {
                 return (
@@ -143,9 +148,20 @@ function Stats() {
 
     return (
         <div>
-            <h2>{activeGroup ? activeGroup.name : activeUser.firstName} : This Month</h2>
+            <h2>{activeGroup ? activeGroup.name : activeUser.firstName} : Stats</h2>
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
+            </Row>
+            <Row>
+                <Col onClick={() => updateMonth(1)} className={1 === monthCount ? "user-list": ""}>
+                    1 month
+                </Col>
+                <Col onClick={() => updateMonth(3)} className={3 === monthCount ? "user-list": ""}>
+                    3 months
+                </Col>
+                <Col onClick={() => updateMonth(6)} className={6 === monthCount ? "user-list": ""}>
+                    6 months
+                </Col>
             </Row>
             {totalExpense === 0 || totalExpense === undefined || totalExpense === null ?
                 <Row>
@@ -172,7 +188,7 @@ function Stats() {
                             {renderCategoryCards()}
                         </Row>
                     <Row>
-                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="amount" limit={5} showDivider={false}/> : ""}
+                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="amount" limit={5} showDivider={false} monthCount={monthCount}/> : ""}
                     </Row>
                 </>
             }
