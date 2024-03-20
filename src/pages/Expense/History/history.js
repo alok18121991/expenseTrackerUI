@@ -119,7 +119,7 @@ function ExpenseHistory(props) {
     };
 
     const getDateFormatted = (dateString) => {
-        let date = moment(dateString);
+        let date = moment(new Date(dateString));
         return date.format("MMM DD, YYYY");
     };
 
@@ -153,9 +153,9 @@ function ExpenseHistory(props) {
             </Row>
 
             {expenseList && expenseList.map((expense, index) => (
-                <div key={`${expense.id}_${index}_div`}>
+                <>
                 { showDivider && renderDivider(expense.expenseDate)}
-                <div className="expense-card" key={`${expense.id}_${index}`} onClick={() => toggleExpense(expense.id)}>
+                <div className="expense-card" key={`${expense.id}`} onClick={() => toggleExpense(expense.id)}>
                         <Row>
                             <Col md={1} xs={2}>
                                 <BagFill color="#2db9c9" size={40} />
@@ -223,15 +223,13 @@ function ExpenseHistory(props) {
                                         <Button variant="primary" onClick={handleClose}>
                                             Close
                                         </Button>
-
                                     </Modal.Footer>
                                 </Modal>
                             </div>
                         }
                     <hr />
-
                 </div>
-                </div>
+                </>
             ))}
 
         </div>
