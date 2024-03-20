@@ -17,6 +17,13 @@ function ExpenseHistory(props) {
     const [expenseList, setExpenseList] = useState([]);
     const [selectedExpenses, setSelectedExpenses] = useState([]);
     const [show, setShow] = useState(false);
+    const [expenseListParams, ] = useState({
+        "groupId": activeGroup && activeGroup.name !== "MyGroup" ? activeGroup.id : "",
+        "userIds": activeGroup && activeGroup.name !== "MyGroup" ? "" : activeUser.id,
+        "limit": props.limit,
+        "sortKey": props.sortKey,
+        "numMonth": 1
+    });
     // const location = useLocation();
     const navigate = useNavigate();
 
@@ -33,37 +40,8 @@ function ExpenseHistory(props) {
 
 
     useEffect(() => {
-        let params = {
-            "groupId": "",
-            "userIds": "",
-            "limit": props.limit,
-            "sortKey": props.sortKey,
-            "numMonth": 1
-        };
-        if (activeGroup && activeGroup.name !== "MyGroup") {
-            params = {
-                ...params,
-                "groupId": activeGroup.id
-
-            }
-        }
-        else {
-            params = {
-                ...params,
-                "userIds": activeUser.id
-
-            }
-        }
-        callGetExpenseListForGroupUsersApi(params)
-            .then(response => {
-                if (response.status === HttpStatusCode.Ok) {
-                    setExpenseList(response.data);
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching expense list:", error);
-            });
-    }, [activeGroup, activeUser, props.limit, props.sortKey]);
+        getExpenseList(expenseListParams);
+    }, [expenseListParams]);
 
     const toggleExpense = (id) => {
         let expenseId = selectedExpenses.find(expenseId => expenseId === id);
@@ -75,28 +53,7 @@ function ExpenseHistory(props) {
 
     }
 
-    const getExpenseList = () => {
-        let params = {
-            "groupId": "",
-            "userIds": "",
-            "limit": props.limit,
-            "sortKey": props.sortKey,
-            "numMonth": 1
-        };
-        if (activeGroup && activeGroup.name !== "MyGroup") {
-            params = {
-                ...params,
-                "groupId": activeGroup.id
-
-            }
-        }
-        else {
-            params = {
-                ...params,
-                "userIds": activeUser.id
-
-            }
-        }
+    const getExpenseList = (params) => {
         callGetExpenseListForGroupUsersApi(params)
             .then(response => {
                 if (response.status === HttpStatusCode.Ok) {
@@ -111,7 +68,7 @@ function ExpenseHistory(props) {
     const deleteExpense = (expenseId) => {
         callDeleteExpenseApi(expenseId)
             .then(() => {
-                getExpenseList();
+                getExpenseList(expenseListParams);
             })
             .catch(error => {
                 console.error("Error deleting expense:", error);

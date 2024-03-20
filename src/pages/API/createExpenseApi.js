@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 async function callCreateExpenseApi(body, event){
-    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+    const apiBaseUrl = process.env.REACT_APP_API_EXPENSE_BASE_URL;
     try{
     const response = await axios.post(apiBaseUrl, body);
             return {

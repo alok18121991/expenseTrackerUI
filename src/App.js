@@ -7,29 +7,33 @@ import AddExpense from './pages/Expense/AddExpense/addExpense';
 import ExpenseHistory from './pages/Expense/History/history';
 import Stats from './pages/Stats/stats';
 import Settings from './pages/Settings/Settings';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import GroupHome from './pages/GroupHome/groupHome';
 import ErrorPage from './pages/error-page';
 import { ActiveGroupContext, UserContext } from './pages/Components/Context/context';
+import { callGetUserDetailsApi } from './pages/API/getUserDetailsApi';
+import { HttpStatusCode } from 'axios';
 
 function App() {
 
-  const [userName, ] = useState("shankar1812")
+  const [userId, ] = useState("65bce7916e102aee72e6706a");
+  // const [userName, ] = useState("shankar1812");
   const [userData, setUserData] = useState();
   const [activeGroup, setActiveGroup] = useState();
 
   useEffect(() => {
-    axios.get('http://192.168.1.8:8080/user/65bce7916e102aee72e6706a')
+    callGetUserDetailsApi(userId)
       .then(response => {
-        console.log("resss....", response)
-        setUserData(response.data.data.data);
+        if (response.status === HttpStatusCode.Ok) {
+          setUserData(response.data);
+        } else {
+          console.log("error occured while fetching userDetails", response.error)
+        }
       })
       .catch(error => {
-        console.log("errrr....", error)
         console.log(error);
       });
-  }, [userName]);
+  }, [userId]);
 
 const router = userData && createBrowserRouter([
   {

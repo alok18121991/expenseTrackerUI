@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 async function callGetExpenseByGroupTypeApi(userIds, numMonths, groupType) {
-    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+    const apiBaseUrl = process.env.REACT_APP_API_EXPENSE_BASE_URL;
     try {
         const response = await axios.get(`${apiBaseUrl}/daily`, {
             params: {
