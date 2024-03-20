@@ -5,7 +5,6 @@ h2 {
 }
 .expense-card {
     margin-bottom: 10px;
-    height:85px;
     border-bottom: 2px beige;
 }
 
@@ -17,6 +16,17 @@ h2 {
 .card-date {
     font-size: small;
     color: grey;
+}
+
+.card-user {
+    font-size: small;
+    color: #adff009c;
+}
+
+.card-other-user {
+    font-size: small;
+    color: grey;
+    /* color: #adff00; */
 }
 
 .card-amount {
@@ -31,4 +41,31 @@ h2 {
     color: grey;
     font-size:small;
     text-transform: uppercase;
+}
+
+.expense-extend-row{
+    height: auto;
+    transition: height 0.25s ease-in;
+}
+
+.expense-extend {
+    text-align: center;
+    margin: 1rem auto;
+}
+
+.expense-extend .btn {
+    width: 100%;
+}
+
+.list-divider{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    width: 43%;
+    text-align: center;
+    background-color: #343a40;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    margin-left: 30%;
+    border-radius: 19px;
 }

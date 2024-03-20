@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { callCreateExpenseApi } from '../../API/createExpenseApi';
@@ -6,49 +6,38 @@ import './expenseForm.css';
 import { CashCoin, CreditCard2FrontFill } from 'react-bootstrap-icons';
 import { HttpStatusCode } from 'axios';
 import SuccessModal from '../../Components/Modal/SuccessModal/successModal';
+import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
-class ExpenseForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            userId: '',
-            amount: '',
-            expenseDate: '',
-            type: '',
-            subType: '',
-            description: '',
-            source: '',
-            showModal: false
-        };
-    }
+function ExpenseForm(props) {
 
-    createExpense(event) {
+    const activeUser = useContext(UserContext);
+    const [activeGroup,] = useContext(ActiveGroupContext);
+
+    const [formData, setFormData] = useState({
+        userId: '',
+        amount: '',
+        expenseDate: '',
+        type: '',
+        subType: '',
+        description: '',
+        source: '',
+        group: activeGroup ? activeGroup.id : ''
+    });
+    const [showModal, setShowModal] = useState(false);
+
+    const createExpense = (event) => {
 
         event.preventDefault();
-        callCreateExpenseApi(this.state, event).then(response => {
+        callCreateExpenseApi(formData, event).then(response => {
             if (response.status === HttpStatusCode.Ok) {
-                this.setState({
-                    ...this.state,
-                    showModal: true
-                });
+                setShowModal(true);
                 event.target.reset();
             }
         });
 
     }
 
-    users = [
-        {
-            userId: '65bce7916e102aee72e6706a',
-            userName: 'Alok Kumar Singh'
-        },
-        {
-            userId: '65bd004222aa8c35198c22be',
-            userName: 'Rashi Vishwakarma'
-        }
-    ];
-
-    categoryMap = [
+    const categoryMap = [
         {
             name: "Home",
             value: "Home"
@@ -77,10 +66,10 @@ class ExpenseForm extends React.Component {
             name: "Investment",
             value: "Investment"
         }
-        
+
     ];
 
-    subCategoryMap = {
+    const subCategoryMap = {
         "Home": [
             {
                 name: "Furniture",
@@ -289,7 +278,7 @@ class ExpenseForm extends React.Component {
                 value: "Gadgets"
             }
         ],
-        "Investment":[
+        "Investment": [
             {
                 name: "Mutual Fund",
                 value: "Mutual Fund"
@@ -313,71 +302,82 @@ class ExpenseForm extends React.Component {
         ]
     }
 
-    sourceMap = [
-        {
-            name: "Credit Card",
-            value: "Credit Card"
-        },
-        {
-            name: "Cash",
-            value: "Cash"
-        }
-    ];
+    // const sourceMap = [
+    //     {
+    //         name: "Credit Card",
+    //         value: "Credit Card"
+    //     },
+    //     {
+    //         name: "Cash",
+    //         value: "Cash"
+    //     }
+    // ];
 
-    handleChange = event => {
+    const handleChange = event => {
 
         const value = event.target.value;
         const name = event.target.name;
-        this.setState({
-            [name]: value
-        });
+        setFormData((prevValue) => {
+            return {
+                ...prevValue,
+                [name]: value
+            }
+        })
+
     };
 
-    handleDateChange = event => {
+    const handleDateChange = event => {
         const value = event.target.value;
         const name = event.target.name;
-        this.setState({
-            [name]: new Date(value)
-        });
+        setFormData((prevValue) => {
+            return {
+                ...prevValue,
+                [name]: new Date(value)
+            }
+        })
     };
 
-    handleAmountChange = event => {
+    const handleAmountChange = event => {
         const value = event.target.value;
         const name = event.target.name;
-        this.setState({
-            [name]: parseFloat(value)
-        });
+        setFormData((prevValue) => {
+            return {
+                ...prevValue,
+                [name]: parseFloat(value)
+            }
+        })
     };
 
-    setModalShow(bool){
-        this.setState({
-            showModal: bool
-        });
-    }
+    const currentDateLimt = new Date().toISOString().split('T')[0];
 
-    currentDateLimt = new Date().toISOString().split('T')[0];
-
-    render() {
-        return (
-            <>
-            <Form onSubmit={(i) => this.createExpense(i)} className="expenseForm">
+    return (
+        activeGroup && activeGroup.name !== "MyGroup"? 
+        <>
+            <h2>
+                {activeGroup.name}
+            </h2>
+            <Form onSubmit={(i) => createExpense(i)} className="expenseForm">
                 <Row>
-                <Form.Group className="mb-3 title-amount" controlId="exampleForm.description">
-                    <Form.Control type="text" placeholder="Enter Description" name="description" onChange={this.handleChange} />
-                </Form.Group>
+                    <Form.Group className="mb-3 title-amount" controlId="exampleForm.description">
+                        <Form.Control type="text" placeholder="Enter Description" name="description" onChange={handleChange} />
+                    </Form.Group>
                 </Row>
                 <Form.Group className="mb-3 title-amount" controlId="expenseForm.amount">
-                    <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={this.handleAmountChange} required />
+                    <Form.Control type="number" placeholder="Enter Amount" name="amount" step="0.1" min='0' onChange={handleAmountChange} required />
                 </Form.Group>
                 <Row className="">
                     <Col xs md>
                         <Form.Group className="" controlId="expenseForm.category">
                             <Form.Label>Paid by</Form.Label>
-                            <Form.Select aria-label="Category" name="userId" onChange={this.handleChange} required>
+                            <Form.Select aria-label="Category" name="userId" onChange={handleChange} required>
                                 <option value="">Select User</option>
-                                {this.users.map((user) => {
+                                {activeGroup.owners.map((user) => {
                                     return (
-                                        <option key={user.userId} value={user.userId}>{user.userName}</option>
+                                        <option key={user.id} value={user.id}>{
+                                            user.id === activeUser.id ?
+                                                "You" :
+                                                user.firstName}
+                                        </option>
                                     )
                                 })
 
@@ -388,43 +388,43 @@ class ExpenseForm extends React.Component {
                     <Col xs md>
                         <Form.Group controlId="expenseForm.date">
                             <Form.Label>Date</Form.Label>
-                            <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={this.handleDateChange} max={this.currentDateLimt} required />
+                            <Form.Control type="date" placeholder="Enter Date" name="expenseDate" onChange={handleDateChange} max={currentDateLimt} required />
                         </Form.Group>
                     </Col>
-                </Row>    
+                </Row>
                 <Form.Group className="mb-3 mode-options" controlId="expenseForm.mode">
                     <Form.Label>Mode of payment</Form.Label>
                     <Row>
                         <Col xs md>
-                    <Form.Check
-                        label={<CreditCard2FrontFill />}
-                        name="source"
-                        type="radio"
-                        id="Card"
-                        value="Credit Card"
-                        required
-                        onChange={this.handleChange}
-                    />
-                    </Col>
-                    <Col xs md>
-                    <Form.Check
-                        label={<CashCoin />}
-                        name="source"
-                        type="radio"
-                        id="Cash"
-                        value="Cash"
-                        required
-                        onChange={this.handleChange}
-                    />
-                    </Col>
+                            <Form.Check
+                                label={<CreditCard2FrontFill />}
+                                name="source"
+                                type="radio"
+                                id="Card"
+                                value="Credit Card"
+                                required
+                                onChange={handleChange}
+                            />
+                        </Col>
+                        <Col xs md>
+                            <Form.Check
+                                label={<CashCoin />}
+                                name="source"
+                                type="radio"
+                                id="Cash"
+                                value="Cash"
+                                required
+                                onChange={handleChange}
+                            />
+                        </Col>
                     </Row>
                 </Form.Group>
-                
+
                 <Form.Group className="mb-3" controlId="expenseForm.category">
                     <Form.Label>Category</Form.Label>
-                    <Form.Select aria-label="Category" name="type" onChange={this.handleChange} required>
+                    <Form.Select aria-label="Category" name="type" onChange={handleChange} required>
                         <option value="">Select Category</option>
-                        {this.categoryMap.map((category) => {
+                        {categoryMap.map((category) => {
                             return (
                                 <option key={category.value} value={category.value} >{category.name}</option>
                             )
@@ -435,9 +435,9 @@ class ExpenseForm extends React.Component {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="expenseForm.subCategory">
                     <Form.Label>Sub Category</Form.Label>
-                    <Form.Select aria-label="Sub Category" name="subType" onChange={this.handleChange} required>
+                    <Form.Select aria-label="Sub Category" name="subType" onChange={handleChange} required>
                         <option value="">Select Sub Category</option>
-                        {this.state.type !== '' && this.subCategoryMap[this.state.type].map((category) => {
+                        {formData.type !== '' && subCategoryMap[formData.type].map((category) => {
                             return (
                                 <option key={category.value} value={category.value}>{category.name}</option>
                             )
@@ -446,16 +446,24 @@ class ExpenseForm extends React.Component {
                         }
                     </Form.Select>
                 </Form.Group>
-                <Row className='add-expense-row'> 
-                <Button variant="primary" type="submit" className='add-expense-btn'>
-                    Add Expense
-                </Button>
-                </Row>    
+                <Row className='add-expense-row'>
+                    <Button variant="primary" type="submit" className='add-expense-btn'>
+                        Add Expense
+                    </Button>
+                </Row>
             </Form>
-            <SuccessModal show={this.state.showModal} onHide={() => this.setModalShow(false)} />
-            </>
-        );
-    }
+            <SuccessModal show={showModal} onHide={() => setShowModal(false)} />
+        </>
+        : 
+        <div>
+            <h2>
+                No Group Selected !!!
+            </h2>
+            <h3>
+                selected group is not valid, please select valid group from group tab
+            </h3>
+        </div>
+    );
 }
 
 

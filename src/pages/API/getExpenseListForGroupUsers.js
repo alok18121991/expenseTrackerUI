@@ -1,16 +1,15 @@
 import axios from "axios";
 
 
-async function callGetExpenseByGroupTypeApi(userIds, numMonths, groupType) {
+async function callGetExpenseListForGroupUsersApi(params) {
     const apiBaseUrl = process.env.REACT_APP_API_EXPENSE_BASE_URL;
     try {
-        const response = await axios.get(`${apiBaseUrl}/daily`, {
-            params: {
-                userids: userIds,
-                numMonths: numMonths,
-                groupType: groupType
+        const response = await axios.get(`${apiBaseUrl}/group`,
+            {
+                params: {
+                   ...params
+                }
             }
-        }
         );
         return {
             error: null,
@@ -26,4 +25,4 @@ async function callGetExpenseByGroupTypeApi(userIds, numMonths, groupType) {
     }
 }
 
-export { callGetExpenseByGroupTypeApi as callGetExpenseByGroupApi };
+export { callGetExpenseListForGroupUsersApi };

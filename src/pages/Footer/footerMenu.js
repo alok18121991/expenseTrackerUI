@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
-import { PlusCircleFill, House, ArrowLeftRight, Gear, BarChart } from 'react-bootstrap-icons';
+import { PlusCircleFill, House, ArrowLeftRight, BarChart, People } from 'react-bootstrap-icons';
 import "./footerMenu.css";
 
 
@@ -10,14 +10,26 @@ class FooterMenu extends React.Component {
         return (
             <Navbar>
                     <Nav className="m-auto footer-nav">
-                        <Link className="nav-link" to={`/`}><House color="grey" size={30} /></Link>
-                        <Link className="nav-link" to={`/history`}><ArrowLeftRight color="grey" size={30} /></Link>
-                        <Link className="nav-link" to={`/add`}><PlusCircleFill color="#2db9c9" size={50} /></Link>
-                        <Link className="nav-link" to={`/stats`}><BarChart color="grey" size={30} /></Link>
-                        <Link className="nav-link" to={`/settings`}><Gear color="grey" size={30} /></Link>
+                        <NavLink className="nav-link" to={`/`} style={this.setMenuStyle()}><House size={30} /></NavLink>
+                        <NavLink className="nav-link" to={`/group`} style={this.setMenuStyle()}><People size={30} /></NavLink>
+                        <NavLink className="nav-link" to={`/add`} style={this.setMenuStyle()}><PlusCircleFill size={50} /></NavLink>
+                        <NavLink className="nav-link" to={`/history`} style={this.setMenuStyle()}><ArrowLeftRight size={30} /></NavLink>
+                        <NavLink className="nav-link" to={`/stats`} style={this.setMenuStyle()}><BarChart size={30} /></NavLink>
+                        {/* <NavLink className="nav-link" to={`/settings`}><Gear color="grey" size={30} /></NavLink> */}
+                        
                     </Nav>
             </Navbar>
         )
+    }
+
+    setMenuStyle() {
+        return ({ isActive, isPending, isTransitioning }) => {
+            return {
+                fontWeight: isActive ? "bold" : "",
+                color: isActive ? "#2db9c9" : "grey",
+                viewTransitionName: isTransitioning ? "slide" : "",
+            };
+        };
     }
 }
 

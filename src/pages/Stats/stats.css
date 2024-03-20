@@ -7,3 +7,8 @@
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
 }
+
+.user-list {
+    float:left;
+    background-color: #1d273f;
+}
