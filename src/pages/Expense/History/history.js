@@ -6,24 +6,22 @@ import moment from "moment";
 import "./history.css";
 import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
 import { callGetExpenseListForGroupUsersApi } from '../../API/getExpenseListForGroupUsers';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
 function ExpenseHistory(props) {
 
-    const [expenseList, setExpenseList] = useState([]);
-    const [, setGroupId] = useState("");
-    const [selectedExpenses, setSelectedExpenses] = useState([]);
-    const [show, setShow] = useState(false);
-    const location = useLocation();
-    const navigate = useNavigate();
-
     const activeUser = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
 
-    const showDivider = props.showDivider !== null || (location.state && location.state.showDivider)? props.showDivider || (location.state && location.state.showDivider) : true;
+    const [expenseList, setExpenseList] = useState([]);
+    const [selectedExpenses, setSelectedExpenses] = useState([]);
+    const [show, setShow] = useState(false);
+    // const location = useLocation();
+    const navigate = useNavigate();
 
-    // const [userId, setUserId] = useState("");
+    const showDivider = props.showDivider !== null ? props.showDivider  : true;
+
     const handleClose = (e) => {
         setShow(false);
     }
@@ -35,11 +33,37 @@ function ExpenseHistory(props) {
 
 
     useEffect(() => {
-        if (location.state != null && location.state.group != null) {
-            setGroupId(location.state.group.id);
+        let params = {
+            "groupId": "",
+            "userIds": "",
+            "limit": props.limit,
+            "sortKey": props.sortKey,
+            "numMonth": 1
+        };
+        if (activeGroup && activeGroup.name !== "MyGroup") {
+            params = {
+                ...params,
+                "groupId": activeGroup.id
+
+            }
         }
-        getExpenseList();
-    }, [props.limit, props.sortKey, location]);
+        else {
+            params = {
+                ...params,
+                "userIds": activeUser.id
+
+            }
+        }
+        callGetExpenseListForGroupUsersApi(params)
+            .then(response => {
+                if (response.status === HttpStatusCode.Ok) {
+                    setExpenseList(response.data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching expense list:", error);
+            });
+    }, [activeGroup, activeUser, props.limit, props.sortKey]);
 
     const toggleExpense = (id) => {
         let expenseId = selectedExpenses.find(expenseId => expenseId === id);
@@ -59,10 +83,10 @@ function ExpenseHistory(props) {
             "sortKey": props.sortKey,
             "numMonth": 1
         };
-        if (location.state != null && location.state.group != null) {
+        if (activeGroup && activeGroup.name !== "MyGroup") {
             params = {
                 ...params,
-                "groupId": location.state.group.id
+                "groupId": activeGroup.id
 
             }
         }
@@ -103,25 +127,6 @@ function ExpenseHistory(props) {
         return title.length > 16 ? `${title.substring(0, 16)}...` : title;
     };
 
-    const getExpenseHistoryState = () => {
-        let historystate = {
-            showDivider: true
-        }
-        
-        if(location.state && location.state.group){
-            let group = location.state.group;
-            return historystate = {
-                ...historystate,
-                group: {
-                    id: group.id,
-                    name: group.name,
-                    owners: group.owners
-                }
-            }
-        }
-        else return historystate;
-    }
-
     let prevDate = "";
     const renderDivider = (date) => {
         date = getDateFormatted(date);
@@ -134,18 +139,16 @@ function ExpenseHistory(props) {
 
     return (
         <div key="expense-list" >
-            {console.log("history active group....", activeGroup)}
             <div key="navigation-btn" >
                 <button onClick={() => navigate(-1)}>go back</button>
                 <button onClick={() => navigate(1)}>go forward</button>
             </div>
             <Row>
                 <Col xs={10}>
-                    <h2 key="title">{location.state && ((location.state.group) && location.state.group.name) ? location.state.group.name : activeUser.firstName} : {props.title}</h2>
+                    <h2 key="title">{ activeGroup ? activeGroup.name : activeUser.firstName} : {props.title}</h2>
                 </Col>
                 <Col xs={2}>
-                    <NavLink key="view all history" className="nav-link" to='/history'
-                        state={getExpenseHistoryState()}><ArrowRight /></NavLink>
+                    <NavLink key="view all history" className="nav-link" to='/history'><ArrowRight /></NavLink>
                 </Col>
             </Row>
 

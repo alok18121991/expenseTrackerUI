@@ -11,11 +11,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import GroupHome from './pages/GroupHome/groupHome';
 import ErrorPage from './pages/error-page';
-import Stats1 from './pages/Stats/stats1';
 import { ActiveGroupContext, UserContext } from './pages/Components/Context/context';
 
 function App() {
 
+  const [userName, ] = useState("shankar1812")
   const [userData, setUserData] = useState();
   const [activeGroup, setActiveGroup] = useState();
 
@@ -29,26 +29,7 @@ function App() {
         console.log("errrr....", error)
         console.log(error);
       });
-  }, []);
-
-
-
-   let user = {
-  id: '65bce7916e102aee72e6706a',
-  firstName: "Alok",
-  lastName: "Kumar Singh"
-};
-
-let users = [
-  {
-      id: '65bce7916e102aee72e6706a',
-      firstName: 'Alok Kumar Singh'
-  },
-  // {
-  //     userId: '65bd004222aa8c35198c22be',
-  //     userName: 'Rashi Vishwakarma'
-  // }
-];
+  }, [userName]);
 
 const router = userData && createBrowserRouter([
   {
@@ -71,8 +52,7 @@ const router = userData && createBrowserRouter([
       },
       {
         path: "stats",
-        // element: <Stats user={user} users={users} limit={0}/>,
-        element: <Stats1 limit={0}/>,
+        element: <Stats limit={0}/>,
       },
       {
         path: "settings",
@@ -81,11 +61,7 @@ const router = userData && createBrowserRouter([
       {
         path: "group",
         element: <GroupHome />
-      },
-      {
-        path: "group/history", 
-        element: <ExpenseHistory title="Expense History" sortKey="expenseDate" limit={0}/>,
-      },
+      }
     ]
   }
 ]);

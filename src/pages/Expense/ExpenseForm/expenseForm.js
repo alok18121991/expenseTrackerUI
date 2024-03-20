@@ -6,11 +6,13 @@ import './expenseForm.css';
 import { CashCoin, CreditCard2FrontFill } from 'react-bootstrap-icons';
 import { HttpStatusCode } from 'axios';
 import SuccessModal from '../../Components/Modal/SuccessModal/successModal';
-import { UserContext } from '../../Components/Context/context';
+import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
 function ExpenseForm(props) {
 
     const activeUser = useContext(UserContext);
+    const [activeGroup,] = useContext(ActiveGroupContext);
+
     const [formData, setFormData] = useState({
         userId: '',
         amount: '',
@@ -19,7 +21,7 @@ function ExpenseForm(props) {
         subType: '',
         description: '',
         source: '',
-        group: '65e0d2b9c6aac0cb5c713767'
+        group: activeGroup ? activeGroup.id : ''
     });
     const [showModal, setShowModal] = useState(false);
 
@@ -34,17 +36,6 @@ function ExpenseForm(props) {
         });
 
     }
-
-    const users = [
-        {
-            userId: '65bce7916e102aee72e6706a',
-            userName: 'Alok Kumar Singh'
-        },
-        {
-            userId: '65bd004222aa8c35198c22be',
-            userName: 'Rashi Vishwakarma'
-        }
-    ];
 
     const categoryMap = [
         {
@@ -360,7 +351,11 @@ function ExpenseForm(props) {
     const currentDateLimt = new Date().toISOString().split('T')[0];
 
     return (
+        activeGroup && activeGroup.name !== "MyGroup"? 
         <>
+            <h2>
+                {activeGroup.name}
+            </h2>
             <Form onSubmit={(i) => createExpense(i)} className="expenseForm">
                 <Row>
                     <Form.Group className="mb-3 title-amount" controlId="exampleForm.description">
@@ -376,12 +371,12 @@ function ExpenseForm(props) {
                             <Form.Label>Paid by</Form.Label>
                             <Form.Select aria-label="Category" name="userId" onChange={handleChange} required>
                                 <option value="">Select User</option>
-                                {users.map((user) => {
+                                {activeGroup.owners.map((user) => {
                                     return (
-                                        <option key={user.userId} value={user.userId}>{
-                                            user.userId === activeUser.id ?
+                                        <option key={user.id} value={user.id}>{
+                                            user.id === activeUser.id ?
                                                 "You" :
-                                                user.userName}
+                                                user.firstName}
                                         </option>
                                     )
                                 })
@@ -459,6 +454,15 @@ function ExpenseForm(props) {
             </Form>
             <SuccessModal show={showModal} onHide={() => setShowModal(false)} />
         </>
+        : 
+        <div>
+            <h2>
+                No Group Selected !!!
+            </h2>
+            <h3>
+                selected group is not valid, please select valid group from group tab
+            </h3>
+        </div>
     );
 }
 

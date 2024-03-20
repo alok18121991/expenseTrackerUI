@@ -27,32 +27,15 @@ function GroupHome() {
         });
     }
 
-    const setStateToLink = (group) => {
-        return {
-            group: {
-                id: group.id,
-                name: group.name,
-                owners: group.owners
-            }
-
-        }
-    }
-
     return (
         <div>
             <h2>Groups</h2>
             {
                 groups && groups.map((group, index) => {
                     return (
-                        
                         <div className="card-body card-body-main group-card" key={group.id}>
-                            {/* {setActiveGroup(group)}
-                           {console.log("activeGroip......", activeGroup)} */}
-                            {/* <h3><NavLink key={group.id} className="nav-link" to='/group/history' */}
-                            <h3><NavLink key={group.id} className="nav-link" to='/'
-                                state={setStateToLink(group)} onClick={()=>setActiveGroup(group)}>{group.name}</NavLink></h3>
+                            <h3><NavLink key={group.id} className="nav-link" to='/' onClick={()=>setActiveGroup(group)}>{group.name}</NavLink></h3>
                         </div>
-
                     )
                 })
             }

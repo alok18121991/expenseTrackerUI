@@ -7,41 +7,38 @@ import ExpenseHistory from '../Expense/History/history';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
 import UserList from '../Components/UserList/userList';
-import { useLocation } from 'react-router-dom';
 import { ActiveGroupContext, UserContext } from '../Components/Context/context';
 
-function Dashboard(props) {
+function Dashboard() {
+
     const activeUser = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
-    const [user, ] = useState(activeUser);
+
     const [users, setUsers] = useState([]);
     const [totalExpense, setTotalExpense] = useState(0);
     const [expenseListGroupByDate, setExpenseListGroupByDate] = useState({});
     const [expenseListGroupByMode, setExpenseListGroupByMode] = useState({});
    
 
-    const location = useLocation();
 
     useEffect(() => {
-        if((location.state !== null) && location.state.user !== null){
-            // setUser(location.state.user);
-            setUsers(location.state.group.owners);
-            setUsers(prevUsers => location.state.group.owners.map(user => ({
-                ...user,
+        if(activeGroup && activeGroup.name !== "MyGroup"){
+            setUsers(prevUsers => activeGroup.owners.map(owner => ({
+                ...owner,
                 selected: true
             })));
         }
         else{
-            // setUser(props.user);
-            setUsers([user]);
-            setUsers(prevUsers => [user].map(thisUser => ({
-                ...user,
-                selected: thisUser.id === user.id
-            })));
+            setUsers([
+                {
+                ...activeUser,
+                selected: true
+            }
+            ]);
         }
         
        
-    }, [user, props.users, location.state]);
+    }, [activeUser, activeGroup]);
 
     useEffect(() => {
         if (users.length > 0) {
@@ -110,8 +107,7 @@ function Dashboard(props) {
 
     return (
         <div>
-            {console.log("active groupppp.....", activeGroup)}
-            <h2>{location.state !==null ? location.state.group.name : user.firstName} : This Month</h2>
+            <h2>{activeGroup ? activeGroup.name : activeUser.firstName} : This Month</h2>
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
             </Row>
@@ -133,7 +129,7 @@ function Dashboard(props) {
                         {renderModeOfExpenseCards()}
                     </Row>
                     <Row>
-                        {user && user.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
+                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
                     </Row>
                 </>
             }
