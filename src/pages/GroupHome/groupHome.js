@@ -4,10 +4,11 @@ import { NavLink } from "react-router-dom";
 import "./groupHome.css";
 import { ActiveGroupContext, UserContext } from "../Components/Context/context";
 import { callGetGroupDetailsApi } from "../API/getGroupDetailsApi";
+import { Col, Row } from "react-bootstrap";
 
 function GroupHome() {
 
-    const activeUser = useContext(UserContext);
+    const [activeUser,] = useContext(UserContext);
     const [, setActiveGroup] = useContext(ActiveGroupContext);
     const [groups, setGroups] = useState();
 
@@ -30,7 +31,14 @@ function GroupHome() {
 
     return (
         <div>
-            <h2>Groups</h2>
+            <Row>
+                <Col xs={6}><h2>Groups</h2></Col>
+                <Col xs={6}>
+                    <NavLink to='/group/add' className="nav-link create-group">
+                        Create Group
+                    </NavLink>
+                </Col>
+            </Row>
             {
                 groups && groups.map((group, index) => {
                     return (

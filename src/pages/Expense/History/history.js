@@ -11,15 +11,15 @@ import { ActiveGroupContext, UserContext } from '../../Components/Context/contex
 
 function ExpenseHistory(props) {
 
-    const activeUser = useContext(UserContext);
+    const [activeUser, ] = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
 
     const [expenseList, setExpenseList] = useState([]);
     const [selectedExpenses, setSelectedExpenses] = useState([]);
     const [show, setShow] = useState(false);
     const [expenseListParams, ] = useState({
-        "groupId": activeGroup && activeGroup.name !== "MyGroup" ? activeGroup.id : "",
-        "userIds": activeGroup && activeGroup.name !== "MyGroup" ? "" : activeUser.id,
+        "groupId": activeGroup && activeGroup.id && activeGroup.name !== "MyGroup" ? activeGroup.id : "",
+        "userIds": activeGroup && activeGroup.id && activeGroup.name !== "MyGroup" ? "" : activeUser.id,
         "limit": props.limit,
         "sortKey": props.sortKey,
         "numMonth": props.monthCount ? props.monthCount : 1

@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import "./dashboard.css";
 import AreaGraph from './AreaGraph/areaGraph';
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import ExpenseCategory from './ExpenseCategory/expenseCategory';
 import ExpenseHistory from '../Expense/History/history';
 import { HttpStatusCode } from 'axios';
 import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
 import UserList from '../Components/UserList/userList';
 import { ActiveGroupContext, UserContext } from '../Components/Context/context';
+import { NavLink } from 'react-router-dom';
+import { Plus } from 'react-bootstrap-icons';
 
 function Dashboard() {
 
-    const activeUser = useContext(UserContext);
+    const [activeUser,] = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
 
     const [users, setUsers] = useState([]);
@@ -20,9 +22,11 @@ function Dashboard() {
     const [expenseListGroupByMode, setExpenseListGroupByMode] = useState({});
    
 
+    const groupId = activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"? activeGroup.id : "";
+
 
     useEffect(() => {
-        if(activeGroup && activeGroup.name !== "MyGroup"){
+        if(activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"){
             setUsers(prevUsers => activeGroup.owners.map(owner => ({
                 ...owner,
                 selected: true
@@ -44,18 +48,18 @@ function Dashboard() {
         if (users.length > 0) {
             const userIds = users.filter(user => user.selected).map(user => user.id).join(',');
             if(userIds.length >0) {
-                getExpenseGroupByGroupType(userIds, 1, "date");
-                getExpenseGroupByGroupType(userIds, 1, "mode");
+                getExpenseGroupByGroupType(groupId, userIds, 1, "date");
+                getExpenseGroupByGroupType(groupId, userIds, 1, "mode");
             }else{
                 setExpenseListGroupByMode({});
                 setExpenseListGroupByDate({});
                 setTotalExpense(0);
             }
         }
-    }, [users]);
+    }, [users, groupId]);
 
-    const getExpenseGroupByGroupType = (userId, monthCount, groupType) => {
-        callGetExpenseByGroupApi(userId, monthCount, groupType).then(response => {
+    const getExpenseGroupByGroupType = (groupId ,userId, monthCount, groupType) => {
+        callGetExpenseByGroupApi(groupId, userId, monthCount, groupType).then(response => {
             if (response.status === HttpStatusCode.Ok) {
                 if (groupType === "mode") {
                     setExpenseListGroupByMode(response.data);
@@ -107,16 +111,30 @@ function Dashboard() {
 
     return (
         <div>
-            <h2>{activeGroup ? activeGroup.name : activeUser.firstName} : This Month</h2>
+            <Row>
+                <Col xs={6}><h2>{activeGroup && activeGroup.id ? activeGroup.name : activeUser.firstName} : This Month</h2></Col>
+                <Col xs={6}>
+                    <NavLink to='/group/add/owner' className="nav-link create-group">
+                        <Plus/>Add Members
+                    </NavLink>
+                </Col>
+            </Row>
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
             </Row>
             {totalExpense === 0 || totalExpense === undefined || totalExpense === null ?
-                <Row>
-                    <Col key={`noexpense_${totalExpense}`}>
-                        Start by adding expense or select a user
-                    </Col>
-                </Row>
+                <div className='no-expense'>
+                    <Row key={`noexpense_${totalExpense}`}>
+                        Start by adding expense
+                    </Row>
+                    <Row>
+                        <NavLink to='/add'>
+                            <Button variant="primary" className="create-group-btn">
+                                Add Expense
+                            </Button>
+                        </NavLink>
+                    </Row>
+                </div>
                 :
                 <>
                     <Row>
@@ -129,7 +147,7 @@ function Dashboard() {
                         {renderModeOfExpenseCards()}
                     </Row>
                     <Row>
-                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
+                        {activeUser ? <ExpenseHistory title="Recent Expenses" sortKey="expenseDate" limit={5} showDivider={false}/> : ""}
                     </Row>
                 </>
             }

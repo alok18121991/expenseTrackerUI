@@ -10,7 +10,7 @@ import { ActiveGroupContext, UserContext } from '../../Components/Context/contex
 
 function ExpenseForm(props) {
 
-    const activeUser = useContext(UserContext);
+    const [activeUser, ] = useContext(UserContext);
     const [activeGroup,] = useContext(ActiveGroupContext);
 
     const [formData, setFormData] = useState({
@@ -28,7 +28,7 @@ function ExpenseForm(props) {
     const createExpense = (event) => {
 
         event.preventDefault();
-        callCreateExpenseApi(formData, event).then(response => {
+        callCreateExpenseApi(formData).then(response => {
             if (response.status === HttpStatusCode.Ok) {
                 setShowModal(true);
                 event.target.reset();
@@ -358,7 +358,7 @@ function ExpenseForm(props) {
             </h2>
             <Form onSubmit={(i) => createExpense(i)} className="expenseForm">
                 <Row>
-                    <Form.Group className="mb-3 title-amount" controlId="exampleForm.description">
+                    <Form.Group className="mb-3 title-amount" controlId="expenseForm.description">
                         <Form.Control type="text" placeholder="Enter Description" name="description" onChange={handleChange} />
                     </Form.Group>
                 </Row>

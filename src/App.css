@@ -1,3 +1,11 @@
+.login {
+  background-color: hsl(218, 37%, 10%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
 
 .App-header {
   background-color: #101723;

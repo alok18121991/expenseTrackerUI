@@ -1,10 +1,10 @@
 import axios from "axios";
 
 
-async function callCreateExpenseApi(body){
-    const apiBaseUrl = process.env.REACT_APP_API_EXPENSE_BASE_URL;
+async function callCreateGroupApi(body){
+    const apiBaseUrl = process.env.REACT_APP_API_SERVER_BASE_URL;
     try{
-    const response = await axios.post(apiBaseUrl, body);
+    const response = await axios.post(`${apiBaseUrl}/group`, body);
             return {
                 error: null,
                 data: response.data,
@@ -19,4 +19,4 @@ async function callCreateExpenseApi(body){
         }
 }
 
-export {callCreateExpenseApi};
+export {callCreateGroupApi};

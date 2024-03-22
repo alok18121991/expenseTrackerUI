@@ -1,0 +1,11 @@
+.create-group-row {
+    margin-top: 2rem;
+  }
+  
+.create-group-btn {
+      margin: auto;
+      width: auto;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-radius: 2rem;
+  }

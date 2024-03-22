@@ -11,7 +11,7 @@ import PieDonutChart from '../Components/Graph/pieDonutChart';
 import { ActiveGroupContext, UserContext } from '../Components/Context/context';
 
 function Stats() {
-    const activeUser = useContext(UserContext);
+    const [activeUser, ] = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
 
     const [users, setUsers] = useState([]);
@@ -23,8 +23,10 @@ function Stats() {
     const [pieChartSeries, setPieChartSeries] = useState({});
     const [monthCount, setMonthCount] = useState(1);
 
+    const groupId = activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"? activeGroup.id : "";
+
     useEffect(() => {
-        if(activeGroup && activeGroup.name !== "MyGroup"){
+        if(activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"){
             setUsers(prevUsers => activeGroup.owners.map(owner => ({
                 ...owner,
                 selected: true
@@ -44,9 +46,9 @@ function Stats() {
         if (users.length > 0) {
             const userIds = users.filter(user => user.selected).map(user => user.id).join(',');
             if(userIds.length >0) {
-                getExpenseGroupByGroupType(userIds, monthCount, "date");
-                getExpenseGroupByGroupType(userIds, monthCount, "mode");
-                getExpenseGroupByGroupType(userIds, monthCount, "type");
+                getExpenseGroupByGroupType(groupId, userIds, monthCount, "date");
+                getExpenseGroupByGroupType(groupId, userIds, monthCount, "mode");
+                getExpenseGroupByGroupType(groupId, userIds, monthCount, "type");
             }else{
                 setExpenseListGroupByMode({});
                 setExpenseListGroupByDate({});
@@ -54,10 +56,10 @@ function Stats() {
                 setTotalExpense(0);
             }
         }
-    }, [users, monthCount]);
+    }, [users, monthCount, groupId]);
 
-    const getExpenseGroupByGroupType = (userId, monthCount, groupType) => {
-        callGetExpenseByGroupApi(userId, monthCount, groupType).then(response => {
+    const getExpenseGroupByGroupType = (groupid, userId, monthCount, groupType) => {
+        callGetExpenseByGroupApi(groupid, userId, monthCount, groupType).then(response => {
             if (response.status === HttpStatusCode.Ok) {
                 if (groupType === "mode") {
                     setExpenseListGroupByMode(response.data);
@@ -152,25 +154,26 @@ function Stats() {
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
             </Row>
-            <Row>
-                <Col onClick={() => updateMonth(1)} className={1 === monthCount ? "user-list": ""}>
-                    1 month
-                </Col>
-                <Col onClick={() => updateMonth(3)} className={3 === monthCount ? "user-list": ""}>
-                    3 months
-                </Col>
-                <Col onClick={() => updateMonth(6)} className={6 === monthCount ? "user-list": ""}>
-                    6 months
-                </Col>
-            </Row>
+           
             {totalExpense === 0 || totalExpense === undefined || totalExpense === null ?
                 <Row>
                     <Col key={`noexpense_${totalExpense}`}>
-                        Start by adding expense or select a user
+                       No Expense for this group!!!
                     </Col>
                 </Row>
                 :
                 <>
+                    <Row>
+                        <Col onClick={() => updateMonth(1)} className={1 === monthCount ? "user-list" : ""}>
+                            1 month
+                        </Col>
+                        <Col onClick={() => updateMonth(3)} className={3 === monthCount ? "user-list" : ""}>
+                            3 months
+                        </Col>
+                        <Col onClick={() => updateMonth(6)} className={6 === monthCount ? "user-list" : ""}>
+                            6 months
+                        </Col>
+                    </Row>
                     <Row>
                         {renderAreaGraph()}
                     </Row>
@@ -188,7 +191,7 @@ function Stats() {
                             {renderCategoryCards()}
                         </Row>
                     <Row>
-                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Recent Expenses" sortKey="amount" limit={5} showDivider={false} monthCount={monthCount}/> : ""}
+                        {activeUser && activeUser.id !== "" ? <ExpenseHistory title="Top Expenses" sortKey="amount" limit={5} showDivider={false} monthCount={monthCount}/> : ""}
                     </Row>
                 </>
             }

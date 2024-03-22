@@ -7,33 +7,37 @@ import AddExpense from './pages/Expense/AddExpense/addExpense';
 import ExpenseHistory from './pages/Expense/History/history';
 import Stats from './pages/Stats/stats';
 import Settings from './pages/Settings/Settings';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import GroupHome from './pages/GroupHome/groupHome';
 import ErrorPage from './pages/error-page';
 import { ActiveGroupContext, UserContext } from './pages/Components/Context/context';
 import { callGetUserDetailsApi } from './pages/API/getUserDetailsApi';
 import { HttpStatusCode } from 'axios';
+import AddGroup from './pages/GroupHome/AddGroup/addGroup';
+import AddOwner from './pages/GroupHome/AddOwners/addOwners';
+import { Button } from 'react-bootstrap';
 
 function App() {
 
   const [userId, ] = useState("65bce7916e102aee72e6706a");
   // const [userName, ] = useState("shankar1812");
   const [userData, setUserData] = useState();
-  const [activeGroup, setActiveGroup] = useState();
+  const [activeGroup, setActiveGroup] = useState({id:null});
 
-  useEffect(() => {
-    callGetUserDetailsApi(userId)
-      .then(response => {
-        if (response.status === HttpStatusCode.Ok) {
-          setUserData(response.data);
-        } else {
-          console.log("error occured while fetching userDetails", response.error)
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [userId]);
+  // useEffect(() => {
+  //   callGetUserDetailsApi(userId)
+  //     .then(response => {
+  //       if (response.status === HttpStatusCode.Ok) {
+  //         setUserData(response.data);
+  //       } else {
+  //         console.log("error occured while fetching userDetails", response.error)
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, [userId]);
+  
 
 const router = userData && createBrowserRouter([
   {
@@ -65,21 +69,56 @@ const router = userData && createBrowserRouter([
       {
         path: "group",
         element: <GroupHome />
+      },
+      {
+        path: "group/add",
+        element: <AddGroup />
+      },
+      {
+        path: "group/add/owner",
+        element: <AddOwner />
       }
     ]
   }
 ]);
   
   
+const handleLogin = event => {
+  callGetUserDetailsApi(userId)
+      .then(response => {
+        if (response.status === HttpStatusCode.Ok) {
+          setUserData(response.data);
+        } else {
+          console.log("error occured while fetching userDetails", response.error)
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}
 
   return (
-    <UserContext.Provider value={userData}>
+    
+    userData ?
+
+    <UserContext.Provider value={[userData, setUserData]}>
       <ActiveGroupContext.Provider value={[activeGroup, setActiveGroup]}>
-        <div className="App">
+        <div>
           {userData && <RouterProvider router={router} />}
         </div>
     </ActiveGroupContext.Provider>
     </UserContext.Provider>
+
+    :
+    
+    <div className="login">
+    <Button variant="primary" onClick={(i) => handleLogin(i)} className="create-group-btn">
+        Login
+    </Button>
+    </div>
+
+
+
   );
 }
 
