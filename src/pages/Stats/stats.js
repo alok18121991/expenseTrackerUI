@@ -150,7 +150,7 @@ function Stats() {
 
     return (
         <div>
-            <h2>{activeGroup ? activeGroup.name : activeUser.firstName} : Stats</h2>
+            <h2>{activeGroup && activeGroup.name ? activeGroup.name : activeUser.firstName} : Stats</h2>
             <Row>
                 <UserList selectedUsers={users} onChange={handleUserSelect} />
             </Row>
