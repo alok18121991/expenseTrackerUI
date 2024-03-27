@@ -30,16 +30,52 @@ function App() {
 
   axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 
-  useEffect(() => {
+  // useEffect(() => {
 
+  //   const refreshToken = getCookie('refresh_token');
+  //   console.log("exisiting refresh token", refreshToken);
+  //   if (refreshToken) {
+  //     console.log("got exisiting refresh token", refreshToken)
+  //     const decodedToken = jwtDecode(refreshToken);
+  //     if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
+  //       const refreshInterval = setInterval(() => {
+  //         refreshAccessToken(refreshToken).then(() => {
+  //           console.log("token refresh called");
+  //         })}, 1 * 60 * 1000);
+  //       return () => clearInterval(refreshInterval);
+  //     }
+  //   }
+  // }, []);
+
+  useEffect(() => {
     const refreshToken = getCookie('refresh_token');
-    console.log("exisiting refresh token", refreshToken);
+    console.log("Existing refresh token:", refreshToken);
     if (refreshToken) {
-      console.log("got exisiting refresh token", refreshToken)
+      console.log("Found existing refresh token:", refreshToken);
       const decodedToken = jwtDecode(refreshToken);
       if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
-        const refreshInterval = setInterval(refreshAccessToken(refreshToken), 1 * 60 * 1000);
+        console.log("Refresh token is not expired. Initiating token refresh...");
+
+        // Call your function to refresh the access token here
+        refreshAccessToken(refreshToken).then(() => {
+          console.log("Access token refreshed successfully");
+        }).catch(error => {
+          console.error("Failed to refresh access token:", error);
+        });
+
+        // Set up a timer to refresh the access token periodically
+        const refreshInterval = setInterval(() => {
+          refreshAccessToken(refreshToken).then(() => {
+            console.log("Access token refreshed successfully");
+          }).catch(error => {
+            console.error("Failed to refresh access token:", error);
+          });
+        }, 30 * 60 * 1000); // Refresh token every 1 minute
+
+        // Clean up the interval when component unmounts
         return () => clearInterval(refreshInterval);
+      } else {
+        console.log("Refresh token is expired");
       }
     }
   }, []);
@@ -113,7 +149,7 @@ function App() {
     }
   ]);
 
-  const refreshAccessToken = (refreshToken) => {
+  const refreshAccessToken = async(refreshToken) => {
    
     callRefreshAccessTokenApi(refreshToken)
     .then(response => {
