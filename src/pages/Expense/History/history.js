@@ -107,7 +107,7 @@ function ExpenseHistory(props) {
             </div> */}
             <Row>
                 <Col xs={10}>
-                    <h2 key="title">{ activeGroup ? activeGroup.name : activeUser.firstName} : {props.title}</h2>
+                    <h2 key="title">{ activeGroup && activeGroup.name ? activeGroup.name : activeUser.firstName} : {props.title}</h2>
                 </Col>
                 <Col xs={2}>
                     <NavLink key="view all history" className="nav-link" to='/history'><ArrowRight /></NavLink>

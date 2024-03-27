@@ -351,7 +351,7 @@ function ExpenseForm(props) {
     const currentDateLimt = new Date().toISOString().split('T')[0];
 
     return (
-        activeGroup && activeGroup.name !== "MyGroup"? 
+        activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"? 
         <>
             <h2>
                 {activeGroup.name}

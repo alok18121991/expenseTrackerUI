@@ -1,13 +1,16 @@
 import axios from "axios";
 
-
-async function callGetUserDetailsApi(userId){
-    const apiBaseUrl = process.env.REACT_APP_API_USER_BASE_URL;
+async function callGetUserDetailsApi(googleCodeResponse){
+    const apiBaseUrl = process.env.REACT_APP_API_AUTH_BASE_URL;
     try {
-        const response = await axios.get(`${apiBaseUrl}/${userId}`);
+        const response = await axios.get(`${apiBaseUrl}/user`,{
+            params: {
+                code: googleCodeResponse.code
+            }
+        });
         return {
             error: null,
-            data: response.data.data.data,
+            data: response.data,
             status: response.status
         };
     } catch (error) {
