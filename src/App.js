@@ -3,23 +3,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { jwtDecode } from "jwt-decode";
 import Cookies from 'universal-cookie';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import MainContainer from './pages/MainContainer';
-import Dashboard from './pages/Dashboard/dashboard';
-import AddExpense from './pages/Expense/AddExpense/addExpense';
-import ExpenseHistory from './pages/Expense/History/history';
-import Stats from './pages/Stats/stats';
-import Settings from './pages/Settings/Settings';
+import MainContainer from './Pages/MainContainer';
+import Dashboard from './Pages/Dashboard/dashboard';
+import AddExpense from './Pages/Expense/AddExpense/addExpense';
+import ExpenseHistory from './Pages/Expense/History/history';
+import Stats from './Pages/Stats/stats';
+import Settings from './Pages/Settings/Settings';
 import { useEffect, useState } from 'react';
-import GroupHome from './pages/GroupHome/groupHome';
-import ErrorPage from './pages/error-page';
-import { ActiveGroupContext, UserContext } from './pages/Components/Context/context';
-import { callGetUserDetailsApi } from './pages/API/getUserDetailsApi';
+import GroupHome from './Pages/GroupHome/groupHome';
+import ErrorPage from './Pages/error-page';
+import { ActiveGroupContext, UserContext } from './Components/Context/context';
+import { callGetUserDetailsApi } from './API/getUserDetailsApi';
 import axios, { HttpStatusCode } from 'axios';
-import AddGroup from './pages/GroupHome/AddGroup/addGroup';
-import AddOwner from './pages/GroupHome/AddOwners/addOwners';
+import AddGroup from './Pages/GroupHome/AddGroup/addGroup';
+import AddOwner from './Pages/GroupHome/AddOwners/addOwners';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
-import { callGetUserDetailByEmailApi } from './pages/API/getUserDetailByEmailApi';
-import { callRefreshAccessTokenApi } from './pages/API/refreshAccessTokenApi';
+import { callGetUserDetailByEmailApi } from './API/getUserDetailByEmailApi';
+import { callRefreshAccessTokenApi } from './API/refreshAccessTokenApi';
 
 
 function App() {
@@ -30,28 +30,11 @@ function App() {
 
   axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 
-  // useEffect(() => {
-
-  //   const refreshToken = getCookie('refresh_token');
-  //   console.log("exisiting refresh token", refreshToken);
-  //   if (refreshToken) {
-  //     console.log("got exisiting refresh token", refreshToken)
-  //     const decodedToken = jwtDecode(refreshToken);
-  //     if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
-  //       const refreshInterval = setInterval(() => {
-  //         refreshAccessToken(refreshToken).then(() => {
-  //           console.log("token refresh called");
-  //         })}, 1 * 60 * 1000);
-  //       return () => clearInterval(refreshInterval);
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     const refreshToken = getCookie('refresh_token');
-    console.log("Existing refresh token:", refreshToken);
+    console.log("Existing refresh token:");
     if (refreshToken) {
-      console.log("Found existing refresh token:", refreshToken);
+      console.log("Found existing refresh token:");
       const decodedToken = jwtDecode(refreshToken);
       if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
         console.log("Refresh token is not expired. Initiating token refresh...");

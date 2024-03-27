@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import { callCreateExpenseApi } from '../../API/createExpenseApi';
+import { callCreateExpenseApi } from '../../../API/createExpenseApi';
 import './expenseForm.css';
 import { CashCoin, CreditCard2FrontFill } from 'react-bootstrap-icons';
 import { HttpStatusCode } from 'axios';
-import SuccessModal from '../../Components/Modal/SuccessModal/successModal';
-import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
+import SuccessModal from '../../../Components/Modal/SuccessModal/successModal';
+import { ActiveGroupContext, UserContext } from '../../../Components/Context/context';
 
 function ExpenseForm(props) {
 

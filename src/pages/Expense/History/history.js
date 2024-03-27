@@ -4,10 +4,10 @@ import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { ArrowRight, BagFill, CurrencyRupee } from 'react-bootstrap-icons';
 import moment from "moment";
 import "./history.css";
-import { callDeleteExpenseApi } from '../../API/deleteExpenseApi';
-import { callGetExpenseListForGroupUsersApi } from '../../API/getExpenseListForGroupUsers';
+import { callDeleteExpenseApi } from '../../../API/deleteExpenseApi';
+import { callGetExpenseListForGroupUsersApi } from '../../../API/getExpenseListForGroupUsers';
 import { NavLink } from 'react-router-dom';
-import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
+import { ActiveGroupContext, UserContext } from '../../../Components/Context/context';
 
 function ExpenseHistory(props) {
 

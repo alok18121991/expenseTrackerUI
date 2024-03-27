@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import "./stats.css";
 import { Row, Col } from "react-bootstrap";
 import { HttpStatusCode } from 'axios';
-import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
-import UserList from '../Components/UserList/userList';
+import { callGetExpenseByGroupApi } from '../../API/getExpenseByGroup';
+import UserList from '../../Components/UserList/userList';
 import AreaGraph from '../Dashboard/AreaGraph/areaGraph';
 import ExpenseCategory from '../Dashboard/ExpenseCategory/expenseCategory';
 import ExpenseHistory from '../Expense/History/history';
-import PieDonutChart from '../Components/Graph/pieDonutChart';
-import { ActiveGroupContext, UserContext } from '../Components/Context/context';
+import PieDonutChart from '../../Components/Graph/pieDonutChart';
+import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 
 function Stats() {
     const [activeUser, ] = useContext(UserContext);

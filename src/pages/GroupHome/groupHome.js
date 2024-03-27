@@ -2,8 +2,8 @@ import { HttpStatusCode } from "axios";
 import React, { useContext, useEffect, useState } from "react"
 import { NavLink } from "react-router-dom";
 import "./groupHome.css";
-import { ActiveGroupContext, UserContext } from "../Components/Context/context";
-import { callGetGroupDetailsApi } from "../API/getGroupDetailsApi";
+import { ActiveGroupContext, UserContext } from "../../Components/Context/context";
+import { callGetGroupDetailsApi } from "../../API/getGroupDetailsApi";
 import { Col, Row } from "react-bootstrap";
 
 function GroupHome() {

@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { UserContext } from "../../Components/Context/context";
-import { callCreateGroupApi } from "../../API/createGroupApi";
+import { UserContext } from "../../../Components/Context/context";
+import { callCreateGroupApi } from "../../../API/createGroupApi";
 import { HttpStatusCode } from "axios";
 import "./addGroup.css"
 import { NavLink, useNavigate } from "react-router-dom";
-import { callGetUserDetailsApi } from "../../API/getUserDetailsApi";
+import { callGetUserDetailsApi } from "../../../API/getUserDetailsApi";
 
 function AddGroup() {
 

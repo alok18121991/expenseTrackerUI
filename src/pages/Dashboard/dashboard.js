@@ -5,9 +5,9 @@ import { Row, Col, Button } from "react-bootstrap";
 import ExpenseCategory from './ExpenseCategory/expenseCategory';
 import ExpenseHistory from '../Expense/History/history';
 import { HttpStatusCode } from 'axios';
-import { callGetExpenseByGroupApi } from '../API/getExpenseByGroup';
-import UserList from '../Components/UserList/userList';
-import { ActiveGroupContext, UserContext } from '../Components/Context/context';
+import { callGetExpenseByGroupApi } from '../../API/getExpenseByGroup';
+import UserList from '../../Components/UserList/userList';
+import { ActiveGroupContext, UserContext } from '../../Components/Context/context';
 import { NavLink } from 'react-router-dom';
 import { Plus } from 'react-bootstrap-icons';
 
