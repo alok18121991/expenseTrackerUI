@@ -45,11 +45,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // const refreshToken = getCookie('refresh_token');
     if (accessToken) {
       const decodedToken = jwtDecode(accessToken);
       if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
-        // refreshAccessToken(refreshToken);
         if (!userData) {
           callGetUserDetailByEmailApi(decodedToken.user)
             .then(response => {
@@ -115,28 +113,8 @@ function App() {
     }
   ]);
 
-  // Function to refresh access token using refresh token
   const refreshAccessToken = (refreshToken) => {
-    // try {
-    //   const response = await fetch('http://localhost:8080/auth/refresh', {
-    //     method: 'POST',
-    //     body: JSON.stringify({ refreshToken }),
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     }
-    //   });
-    //   if (response.ok) {
-    //     const { accessToken } = await response.json();
-    //     console.log("access token.....", accessToken)
-    //     setAccessToken(accessToken); // Update access token
-
-    //   } else {
-    //     console.error('Token refresh failed:', response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error('Error refreshing token:', error);
-    // }
-
+   
     callRefreshAccessTokenApi(refreshToken)
     .then(response => {
       if (response.status === HttpStatusCode.Ok) {
