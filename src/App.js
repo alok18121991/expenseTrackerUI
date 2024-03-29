@@ -32,28 +32,19 @@ function App() {
 
   useEffect(() => {
     const refreshToken = getCookie('refresh_token');
-    console.log("Existing refresh token:");
+    // console.log("Existing refresh token:");
     if (refreshToken) {
-      console.log("Found existing refresh token:");
+      // console.log("Found existing refresh token:");
       const decodedToken = jwtDecode(refreshToken);
       if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
-        console.log("Refresh token is not expired. Initiating token refresh...");
+        // console.log("Refresh token is not expired. Initiating token refresh...");
 
         // Call your function to refresh the access token here
-        refreshAccessToken(refreshToken).then(() => {
-          console.log("Access token refreshed successfully");
-        }).catch(error => {
-          console.error("Failed to refresh access token:", error);
-        });
+        refreshAccessToken(refreshToken)
 
         // Set up a timer to refresh the access token periodically
         const refreshInterval = setInterval(() => {
-          refreshAccessToken(refreshToken).then(() => {
-            console.log("Access token refreshed successfully");
-          }).catch(error => {
-            console.error("Failed to refresh access token:", error);
-          });
-        }, 30 * 60 * 1000); // Refresh token every 1 minute
+          refreshAccessToken(refreshToken)}, 5 * 60 * 1000); // Refresh token every 29 minute
 
         // Clean up the interval when component unmounts
         return () => clearInterval(refreshInterval);
@@ -139,6 +130,7 @@ function App() {
       if (response.status === HttpStatusCode.Ok) {
         const { accessToken } = response.data;
         setAccessToken(accessToken);
+        // console.log("Access token refreshed successfully");
       }
       else{
         console.error('Token refresh failed:', response.error);
@@ -160,7 +152,7 @@ function App() {
       .then(response => {
         if (response.status === HttpStatusCode.Ok) {
           const { accessToken, refreshToken, userData } = response.data;
-          setCookie('refresh_token', refreshToken, 12, true);
+          setCookie('refresh_token', refreshToken, 3*24);
           setAccessToken(accessToken) // Store JWT token in state
           setUserData(userData);
 
@@ -173,7 +165,7 @@ function App() {
       });
   };
 
-  const setCookie = (name, value, hours, httpOnly) => {
+  const setCookie = (name, value, hours) => {
     const date = new Date();
     date.setTime(date.getTime() + (hours * 60 * 60 * 1000)); // Convert minutes to milliseconds
     const cookies = new Cookies();

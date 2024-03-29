@@ -114,7 +114,7 @@ function ExpenseHistory(props) {
                 </Col>
             </Row>
 
-            {expenseList && expenseList.map((expense, index) => (
+            {expenseList && expenseList.map((expense, ) => (
                 <>
                 { showDivider && renderDivider(expense.expenseDate)}
                 <div className="expense-card" key={`${expense.id}`} onClick={() => toggleExpense(expense.id)}>

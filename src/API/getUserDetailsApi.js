@@ -1,9 +1,9 @@
 import axios from "axios";
 
 async function callGetUserDetailsApi(googleCodeResponse){
-    const apiBaseUrl = process.env.REACT_APP_API_AUTH_BASE_URL;
+    const authApiBaseUrl = process.env.REACT_APP_API_AUTH_BASE_URL;
     try {
-        const response = await axios.get(`${apiBaseUrl}/user`,{
+        const response = await axios.get(`${authApiBaseUrl}/user`,{
             params: {
                 code: googleCodeResponse.code
             }
