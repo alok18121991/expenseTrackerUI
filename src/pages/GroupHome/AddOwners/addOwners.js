@@ -8,6 +8,7 @@ import { HttpStatusCode } from "axios";
 import "./addOwners.css";
 import { callAddOwnerToGroupApi } from "../../../API/addOwnerToGroupApi";
 import { callGetGroupDetailsApi } from "../../../API/getGroupDetailsApi";
+import { callInviteAndAddOwnerToGroupApi } from "../../../API/inviteAndAddOwnerToGroupApi";
 
 function AddOwner() {
 
@@ -16,7 +17,8 @@ function AddOwner() {
 
     const [formData, setFormData] = useState({
         email: '',
-        ownerId:''
+        ownerId:'',
+        name: ''
     });
 
     const [memberList, setMemberList] = useState();
@@ -25,14 +27,16 @@ function AddOwner() {
         callGetRelatedUsersApi(activeUser.id).then(response => {
             if(response.status === HttpStatusCode.Ok){
                 let members = response.data.owners
-                members = members.filter(element => !activeGroup.owners.find(el => el.id === element.id));
+                if(members && activeGroup && activeGroup.owners){
+                 members = members.filter(element =>  !activeGroup.owners.find(el => el.id === element.id));
+                }
                 setMemberList(members);
             }
             else{
                 console.log("error occured while fetching related members");
             }
         })
-    }, [activeUser, activeGroup.owners])
+    }, [activeUser, activeGroup, activeGroup.owners])
 
 
 
@@ -41,7 +45,6 @@ function AddOwner() {
 
         const value = event.target.value;
         const name = event.target.name;
-        console.log(formData);
         setFormData((prevValue) => {
             return {
                 ...prevValue,
@@ -79,6 +82,25 @@ function AddOwner() {
         });
     }
 
+    const inviteOwner = event => {
+        event.preventDefault();
+        let body = {
+            userid: activeUser.id,
+            userName: `${activeUser.firstName} ${activeUser.lastName}`,
+            inviteeName: formData.name,
+            inviteeEmail: formData.email,
+            groupId: activeGroup.id
+
+        }
+        callInviteAndAddOwnerToGroupApi(body).then(response => {
+            if(response.status === HttpStatusCode.Ok){
+                console.log("invite sent to : ", formData.email)
+            }
+            else{
+                console.error("failed to invite : ", formData.email)
+            }
+    })
+    }
    
 
     return(
@@ -96,8 +118,8 @@ function AddOwner() {
                 </Col>
             </Row>
             <Row>
-                {/* <Form onSubmit={(i) => addOwner(i)} > */}
-                <Form>
+                <Form onSubmit={(i) => inviteOwner(i)} >
+                {/* <Form> */}
                     <Row>
                         <Form.Group className="mb-3" controlId="exampleForm.name">
                             <Form.Control type="text" placeholder="Enter members name" name="name" onChange={handleChange} />
@@ -105,7 +127,7 @@ function AddOwner() {
                     </Row>
                     <Row>
                         <Form.Group className="mb-3" controlId="exampleForm.email">
-                            <Form.Control type="text" placeholder="Enter members email" name="email" onChange={handleChange} />
+                            <Form.Control type="text" placeholder="Enter members gmail id only" name="email" onChange={handleChange} />
                         </Form.Group>
                     </Row>
                     <Row className="create-group-row">

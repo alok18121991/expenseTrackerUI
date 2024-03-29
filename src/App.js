@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import GroupHome from './Pages/GroupHome/groupHome';
 import ErrorPage from './Pages/error-page';
 import { ActiveGroupContext, UserContext } from './Components/Context/context';
-import { callGetUserDetailsApi } from './API/getUserDetailsApi';
+import { callGetAuthUserDetailsApi } from './API/getAuthUserDetailsApi';
 import axios, { HttpStatusCode } from 'axios';
 import AddGroup from './Pages/GroupHome/AddGroup/addGroup';
 import AddOwner from './Pages/GroupHome/AddOwners/addOwners';
@@ -148,7 +148,7 @@ function App() {
   });
 
   const handleLogin = codeResponse => {
-    callGetUserDetailsApi(codeResponse)
+    callGetAuthUserDetailsApi(codeResponse)
       .then(response => {
         if (response.status === HttpStatusCode.Ok) {
           const { accessToken, refreshToken, userData } = response.data;

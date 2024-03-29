@@ -40,7 +40,7 @@ function AddGroup() {
                 callGetUserDetailsApi(activeUser.id)
                 .then(response => {
                     if (response.status === HttpStatusCode.Ok) {
-                        setUserData(response.data);
+                        setUserData(response.data)
                         navigate(-1);
                     } else {
                         console.log("error occured while fetching userDetails", response.error)
