@@ -14,7 +14,7 @@ function GroupHome() {
 
     useEffect(() => {
         callGetGroupDetails(activeUser.groups.toString())
-    }, [activeUser, activeUser.groups])
+    }, [activeUser.groups])
 
     const callGetGroupDetails = (ids) => {
         callGetGroupDetailsApi(ids).then(response => {

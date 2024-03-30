@@ -21,12 +21,13 @@ function Dashboard() {
     const [expenseListGroupByDate, setExpenseListGroupByDate] = useState({});
     const [expenseListGroupByMode, setExpenseListGroupByMode] = useState({});
    
+    const defaultGroupName = process.env.REACT_APP_DEFAULT_GROUP;
 
-    const groupId = activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"? activeGroup.id : "";
+    const groupId = activeGroup && activeGroup.id && activeGroup.name !== defaultGroupName ? activeGroup.id : "";
 
 
     useEffect(() => {
-        if(activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"){
+        if(activeGroup && activeGroup.id && activeGroup.name !== defaultGroupName){
             setUsers(prevUsers => activeGroup.owners.map(owner => ({
                 ...owner,
                 selected: true
@@ -42,7 +43,7 @@ function Dashboard() {
         }
         
        
-    }, [activeUser, activeGroup]);
+    }, [activeUser, activeGroup, defaultGroupName]);
 
     useEffect(() => {
         if (users.length > 0) {

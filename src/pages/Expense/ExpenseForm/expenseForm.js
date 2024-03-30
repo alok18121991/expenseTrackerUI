@@ -25,6 +25,8 @@ function ExpenseForm(props) {
     });
     const [showModal, setShowModal] = useState(false);
 
+    const defaultGroupName = process.env.REACT_APP_DEFAULT_GROUP;
+
     const createExpense = (event) => {
 
         event.preventDefault();
@@ -351,7 +353,7 @@ function ExpenseForm(props) {
     const currentDateLimt = new Date().toISOString().split('T')[0];
 
     return (
-        activeGroup && activeGroup.id && activeGroup.name !== "MyGroup"? 
+        activeGroup && activeGroup.id && activeGroup.name !== defaultGroupName? 
         <>
             <h2>
                 {activeGroup.name}

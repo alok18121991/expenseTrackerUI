@@ -14,18 +14,18 @@ function ExpenseHistory(props) {
     const [activeUser, ] = useContext(UserContext);
     const [activeGroup, ] = useContext(ActiveGroupContext);
 
+    const defaultGroupName = process.env.REACT_APP_DEFAULT_GROUP;
+
     const [expenseList, setExpenseList] = useState([]);
     const [selectedExpenses, setSelectedExpenses] = useState([]);
     const [show, setShow] = useState(false);
     const [expenseListParams, ] = useState({
-        "groupId": activeGroup && activeGroup.id && activeGroup.name !== "MyGroup" ? activeGroup.id : "",
-        "userIds": activeGroup && activeGroup.id && activeGroup.name !== "MyGroup" ? "" : activeUser.id,
+        "groupId": activeGroup && activeGroup.id && activeGroup.name !== defaultGroupName ? activeGroup.id : "",
+        "userIds": activeGroup && activeGroup.id && activeGroup.name !== defaultGroupName ? "" : activeUser.id,
         "limit": props.limit,
         "sortKey": props.sortKey,
         "numMonth": props.monthCount ? props.monthCount : 1
     });
-    // const location = useLocation();
-    // const navigate = useNavigate();
 
     const showDivider = props.showDivider !== null ? props.showDivider  : true;
 
